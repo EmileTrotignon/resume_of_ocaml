@@ -1,0 +1,1 @@
+let latex s = s

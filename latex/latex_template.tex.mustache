@@ -1,0 +1,46 @@
+
+\documentclass[10pt, a4paper, roman, french]{moderncv}
+\moderncvstyle{classic}                             
+\moderncvcolor{purple}                              
+\usepackage[utf8]{inputenc}
+\usepackage[light]{CormorantGaramond}
+\usepackage[T1]{fontenc}
+\usepackage[scale=0.75,a4paper]{geometry}
+\usepackage{babel}
+\usepackage{geometry}
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+%----------------------------------------------------------------------------------
+%            informations personnelles
+%----------------------------------------------------------------------------------
+\firstname{ {{&firstname}} }
+\familyname{ {{&lastname}} }
+\address{96 rue de Fontani\`ere}{69100 Villeurbanne}{France}
+\mobile{ {{phonenumber}} }                          
+\extrainfo{Né le {{birthdate}} }
+\email{ {{email}} }                               
+% \photo[64pt][0.4pt]{Image} % 
+\begin{document}
+	\makecvtitle
+	\section{Formation}
+	 {{#formations}} 
+		\cventry{ {{&date_start}} -- {{&date_end}} }{ {{&diploma}} }{ {{&school}} }{}{}{}
+	 {{/formations}}
+	\section{Expérience}
+		 {{#experiences}} 
+			\cventry{ {{&date}} }{ {{&title}} }{ {{&company}} }{ {{&location}} }{}{ {{&description}} }
+		 {{/experiences}} 
+
+	\section{Langues}
+		 {{#languages}} 
+	    \cvitem{ {{&name}} }{ {{&strength}} }
+		 {{/languages}} 
+	
+	\section{Compétences techniques}
+		 {{#skills}} 
+			\subsection{ {{&name}} ({{&strength}})}
+				 {{&description}} 
+		 {{/skills}} 
+	    
+
+\end{document}

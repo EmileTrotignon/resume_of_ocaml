@@ -1,0 +1,17 @@
+(rule
+ (target style.css)
+ (deps
+  (file site/style.sass))
+ (mode
+  (promote
+   (into site)))
+ (action
+  (run sass site/style.sass style.css)))
+
+(rule
+  (targets fr.tex en.tex resume_en.html index.html)
+  (mode
+  (promote
+   (into site)))
+   (action
+      (run build_resume)))

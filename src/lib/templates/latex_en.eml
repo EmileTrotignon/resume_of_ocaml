@@ -1,0 +1,57 @@
+<%# (cv: Resume.t') %>
+\documentclass[10pt, a4paper, roman, french]{moderncv}
+\moderncvstyle{classic}                             
+\moderncvcolor{purple}                              
+\usepackage[utf8]{inputenc}
+\usepackage[light]{CormorantGaramond}
+\usepackage[T1]{fontenc}
+\usepackage[scale=0.75,a4paper]{geometry}
+\usepackage{babel}
+\usepackage{geometry}
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+%----------------------------------------------------------------------------------
+%            informations personnelles
+%type t' = {
+%  title : string;
+%  description : string;
+%  company : string;
+%  location : string;
+%  date : string;
+%}
+%----------------------------------------------------------------------------------
+\firstname{<%- cv.firstname %>}
+\familyname{<%- cv.lastname %>}
+\mobile{<%- cv.phonenumber %>}                          
+\extrainfo{Born <%- cv.birthdate %>}
+\email{<%- cv.email %>}                               
+% \photo[64pt][0.4pt]{Image} % 
+\begin{document}
+	\makecvtitle
+	\section{Formation}
+	<% List.iter cv.formations ~f:(fun f -> %>
+		\cventry{<%- f.date_start%> -- <%- f.date_end %> }{<%- f.diploma %>}{<%- f.school %>}{}{}{}
+	<% ) ; %>
+	\section{Experience}
+	<% List.iter cv.experiences ~f:(fun e -> %>
+		\cventry{<%- e.date %>}{<%- e.title %> }{<%- e.company %>}{<%- e.location %>}{}{e.description}
+	 <% ) ; %>
+
+	\section{Languages}
+		<% List.iter cv.languages ~f:(fun l -> %>
+	    \cvitem{<%- l.name%>}{<%- Strength.(match l.strength with
+			| Basic -> "Notions"
+			| Intermediate -> "Intermediate"
+			| Strong -> "Fluent"
+			| VeryStrong -> "Native") %>}
+		<% ) ; %>	
+	\section{Technical skills}
+	<% List.iter cv.skills ~f:(fun s -> %>
+		\subsection{<%-s.name%> (<%-Strength.(match s.strength with
+			| Basic -> "basique"
+			| Intermediate -> "intermediate"
+			| Strong -> "strong"
+			| VeryStrong -> "very strong")%>)}
+			<%- s.description %>
+	<% ) ; %>
+\end{document}

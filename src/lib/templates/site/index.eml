@@ -1,0 +1,21 @@
+<%# (cv: Resume.t') %>
+<%- page_top cv %>
+    <%- Components.sidebar_top %>
+        <%- Components.navmenu "Index" %>
+        <%- Components.contact cv %>
+    <%- Components.sidebar_bot %>
+    <div id="content-wrapper">
+        <article id="content">
+            <section>
+                <p>
+                    Welcome to my home page.
+                </p>
+                <p>
+                    I am a student in computer science at ENS Paris-Saclay. 
+                    I am very interested in the OCaml langage, I also like C++ and graphics programming. 
+                    You check some of my projects out on my <a href="https://github.com/EmileTrotignon">github</a>, and my resume on this website.
+                </p>
+            </section>
+        </article>
+    </div>
+<%- page_bot %>
