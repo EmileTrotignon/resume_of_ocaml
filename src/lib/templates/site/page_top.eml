@@ -138,24 +138,29 @@
     }
 
     function createPath(points, center) {
-        var path = new CompoundPath();
+        var paths = new CompoundPath();
         if (!selected) { 
-            path.strokeColor = spotColor;
+            paths.strokeColor = spotColor;
         } else {
-            path.fullySelected = selected;
+            paths.fullySelected = selected;
         }
-        path.closed = true;
+        paths.closed = true;
 
         for (var i = 0, l = points.length; i < l; i++) {
             var point = points[i];
             var next = points[(i + 1) == points.length ? 0 : i + 1];
             var prec = points[(i - 1) == 0 ? points.length -1 : i - 1];
             var vector = (next - point) / 2;
-            path.addChild(new Path.Line(point, next));
+            var path = new Path.Line(point, next);
+            //var circle = new Path.Circle(point, 1);
+            //circle.fillColor = new Color("white");
+            paths.addChild(path);
+            paths.addChild(circle);
         }
-        path.scale(0.9);
+        //paths.scale(0.9);
         //removeSmallBits(path);
-        return path;
+        
+        return paths;
     }
 
     function onResize() {
