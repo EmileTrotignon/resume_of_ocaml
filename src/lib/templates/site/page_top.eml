@@ -153,7 +153,7 @@
             var vector = (next - point) / 2;
             path.addChild(new Path.Line(point, next));
         }
-        path.scale(0.95);
+        path.scale(0.9);
         //removeSmallBits(path);
         return path;
     }
