@@ -155,7 +155,7 @@
             //var circle = new Path.Circle(point, 1);
             //circle.fillColor = new Color("white");
             paths.addChild(path);
-            paths.addChild(circle);
+            //paths.addChild(circle);
         }
         //paths.scale(0.9);
         //removeSmallBits(path);
