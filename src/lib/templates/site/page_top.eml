@@ -144,7 +144,7 @@
         } else {
             paths.fullySelected = selected;
         }
-        paths.closed = true;
+        //paths.closed = true;
 
         for (var i = 0, l = points.length; i < l; i++) {
             var point = points[i];
@@ -152,12 +152,13 @@
             var prec = points[(i - 1) == 0 ? points.length -1 : i - 1];
             var vector = (next - point) / 2;
             var path = new Path.Line(point, next);
+            path.scale(0.66);
+
             //var circle = new Path.Circle(point, 1);
             //circle.fillColor = new Color("white");
             paths.addChild(path);
             //paths.addChild(circle);
         }
-        //paths.scale(0.9);
         //removeSmallBits(path);
         
         return paths;
