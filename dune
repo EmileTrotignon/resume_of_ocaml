@@ -2,6 +2,7 @@
  (target style.css)
  (deps
   (file site/style.sass))
+ (alias site)
  (mode
   (promote
    (into site)))
@@ -9,9 +10,33 @@
   (run sass site/style.sass style.css)))
 
 (rule
-  (targets fr.tex en.tex resume_en.html index.html)
-  (mode
+ (targets fr.tex en.tex resume_en.html index.html)
+ (alias site)
+ (deps src/main.exe)
+ (mode
   (promote
    (into site)))
-   (action
-      (run build_resume)))
+ (action
+  (run src/main.exe)))
+
+(rule
+ (deps
+  (file en.tex))
+ (targets en.pdf)
+ (alias site)
+ (mode
+  (promote
+   (into site/files)))
+ (action
+  (run pdflatex en.tex)))
+
+(rule
+ (deps
+  (file fr.tex))
+ (targets fr.pdf)
+ (alias site)
+ (mode
+  (promote
+   (into site/files)))
+ (action
+  (run pdflatex fr.tex)))

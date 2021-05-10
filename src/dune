@@ -1,7 +1,6 @@
 (executable
-  (public_name build_resume)
-  (name main)
-  (libraries core resume_lib instance)
-  (preprocess
-    (pps embedded_ocaml_templates.ppx_eml))
-    (flags :standard -w +39))
+ (name main)
+ (libraries core resume_lib instance)
+ (preprocess
+  (pps embedded_ocaml_templates.ppx_eml))
+ (flags :standard -w +39))

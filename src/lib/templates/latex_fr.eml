@@ -5,10 +5,23 @@
 \usepackage[utf8]{inputenc}
 \usepackage[light]{CormorantGaramond}
 \usepackage[T1]{fontenc}
-\usepackage[scale=0.75,a4paper]{geometry}
+\usepackage[scale=1,a4paper]{geometry}
 \usepackage{babel}
 \usepackage{geometry}
+\usepackage{tikz}
 \geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+
+\definecolor{white}{HTML}{DDDDDD}
+\definecolor{gray}{HTML}{404040}
+\definecolor{purple}{HTML}{8054cc}
+
+\DeclareRobustCommand{\skills}[1]{ 
+    \texorpdfstring{\protect\tikz[baseline]{
+		\filldraw[fill=white, draw=gray] (0,0) rectangle (5,0.175);
+		\draw[fill=purple](0,0) rectangle ({#1},0.175);
+    }}{skill level {#1}}
+}
 
 %----------------------------------------------------------------------------------
 %            informations personnelles
@@ -27,31 +40,30 @@
 \email{<%- cv.email %>}                               
 % \photo[64pt][0.4pt]{Image} % 
 \begin{document}
+
 	\makecvtitle
+	<%- cv.intro %>
 	\section{Formation}
-	<% List.iter cv.formations ~f:(fun f -> %>
+	<% List.iter  (fun (f:Formation.t') -> %>
 		\cventry{<%- f.date_start%> -- <%- f.date_end %> }{<%- f.diploma %>}{<%- f.school %>}{}{}{}
-	<% ) ; %>
+	<% ) cv.formations ; %>
+	
 	\section{Expérience}
-	<% List.iter cv.experiences ~f:(fun e -> %>
+	<% List.iter (fun (e:Experience.t') -> %>
 		\cventry{<%- e.date %>}{<%- e.title %> }{<%- e.company %>}{<%- e.location %>}{}{<%- e.description %>}
-	 <% ) ; %>
+	 <% ) cv.experiences ; %>
 
 	\section{Langues}
-		<% List.iter cv.languages ~f:(fun l -> %>
+		<% List.iter (fun (l:Language.t') -> %>
 	    \cvitem{<%- l.name%>}{<%- Strength.(match l.strength with
 			| Basic -> "Notions"
 			| Intermediate -> "Niveau intermédiaire"
 			| Strong -> "Courant"
 			| VeryStrong -> "Maternel") %>}
-		<% ) ; %>	
+		<% ) cv.languages ; %>	
 	\section{Compétences techniques}
-	<% List.iter cv.skills ~f:(fun s -> %>
-		\subsection{<%-s.name%> (<%-Strength.(match s.strength with
-			| Basic -> "basique"
-			| Intermediate -> "intermédiaire"
-			| Strong -> "fort"
-			| VeryStrong -> "trés fort")%>)}
+	<% List.iter (fun (s:Skill.t') -> %>
+		\subsection{<%- s.name %>}
 			<%- s.description %>
-	<% ) ; %>
+	<% ) cv.skills ; %>
 \end{document}

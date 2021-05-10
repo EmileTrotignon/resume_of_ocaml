@@ -1,11 +1,13 @@
 (library
  (name resume_lib)
-  (libraries core)
-  (preprocess
-    (pps embedded_ocaml_templates.ppx_eml))
-    (flags :standard -w +39))
+ (libraries core)
+ (preprocess
+  (pps embedded_ocaml_templates.ppx_eml))
+ (flags :standard -w +39))
 
-  (rule
-    (target templates.ml)
-    (deps (source_tree templates))
-    (action (run eml_compiler templates)))
+(rule
+ (target templates.ml)
+ (deps
+  (source_tree templates))
+ (action
+  (run eml_compiler templates)))
