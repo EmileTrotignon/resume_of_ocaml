@@ -139,7 +139,7 @@ let emile =
                ~english:
                  [ S
                      "For a month, I contributed to the graphical integration of the new website for ENSSIB, the \
-                      French school for library curators. You can see their website here :"
+                      French school for library curators. You can see their website here : "
                  ; f "url" "http://www.enssib.fr/" ] ) ]
     ~languages:
       [ Language.make (v ~french:"Anglais" ~english:"English") Strong
@@ -150,21 +150,22 @@ let emile =
             (v
                ~french:
                  [ S
-                     "La compilation des langages de programmation est un sujet qui m'intéresse beaucoup. Je suis à \
-                      l'heure actuelle un cours de compilation à l'Université de Paris, qui a pour but \
-                      d'implémenter un language de programmation du style ML.\n\
-                      Pour l'instant, il ne m'est pas permis de partager mon code, mais la description du cours est \
-                      disponible ici : "
+                     "La compilation des langages de programmation est un sujet qui m'intéresse beaucoup. J'ai suivi \
+                      lors de mon premier semestre de M1 un cours de compilation à l'Université de Paris, qui a pour \
+                      but d'implémenter un language de programmation du style ML.\n\
+                      la description du cours est disponible ici : "
                  ; f "url" "https://www.irif.fr/~guatto//teaching/20-21/compil/syllabus-compil-20-21.pdf"
+                 ; S ".\nEt mon code ici : "; f "url" "https://github.com/EmileTrotignon/cours-compilation-p7"
                  ; S ".\nJ'ai aussi programmé en 2019 un compilateur pour un sous-ensemble du langage C : "
                  ; f "url" "https://github.com/EmileTrotignon/mcc" ]
                ~english:
                  [ S
-                     "I am very interested by compilation. I am currently following a course on compilation at the \
-                      University of Paris. The goal of the course is to implement an ML-like programming language.\n\
-                      For now, I am not allowed to share the code I wrote for the course, but the description is \
-                      available here (in french) : "
+                     "I am very interested by compilation. In my first semester of M1 , I followed a course on \
+                      compilation at the University of Paris. The goal of the course was to implement an ML-like \
+                      programming language.\n\
+                      The description of the course is available here (in french) : "
                  ; f "url" "https://www.irif.fr/~guatto//teaching/20-21/compil/syllabus-compil-20-21.pdf"
+                 ; S ".\nAnd my code here : "; f "url" "https://github.com/EmileTrotignon/cours-compilation-p7"
                  ; S ".\nI have also programmed a compiler for a subset of the C language in 2019 : "
                  ; f "url" "https://github.com/EmileTrotignon/mcc" ] )
       ; skill
