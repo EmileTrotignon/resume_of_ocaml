@@ -2,7 +2,7 @@
  (target style.css)
  (deps
   (file site/style.sass))
- (alias site)
+ (aliases style site)
  (mode
   (promote
    (into site)))
@@ -40,3 +40,11 @@
    (into site/files)))
  (action
   (run pdflatex fr.tex)))
+
+(rule
+ (aliases site script)
+ (deps src/jsoo/blog_loader.bc.js)
+ (mode
+  (promote
+   (into site/js)))
+  (action (copy src/jsoo/blog_loader.bc.js blog_loader.js)))

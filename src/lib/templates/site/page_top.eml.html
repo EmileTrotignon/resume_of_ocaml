@@ -6,16 +6,17 @@
     <title><%- cv.firstname %> <%- cv.lastname %>'s personal page</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap" rel="stylesheet">
 
     <script src="js/rhill-voronoi-core.js"></script>
+    <script src="js/blog_loader.js"></script>
     <script src="https://kit.fontawesome.com/0c027fe19b.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.11/paper-full.min.js"></script>
     <script type="text/paperscript"  canvas="canvas-1">
     var voronoi =  new Voronoi();
-    var sites = generateBeeHivePoints(view.size / 50, true);
-    var speeds = generateSpeeds(view.size / 50);
-    var forces = generateSpeeds(view.size / 50);
+    var sites = generateBeeHivePoints(view.size / 75, true);
+    var speeds = generateSpeeds(view.size / 75);
+    var forces = generateSpeeds(view.size / 75);
     var bbox, diagram;
     var oldSize = view.size;
     var spotColor = new Color('rgba(240, 84, 76, 0.66)');
@@ -139,7 +140,7 @@
 
     function createPath(points, center) {
         var paths = new CompoundPath();
-        if (!selected) { 
+        if (!selected) {
             paths.strokeColor = spotColor;
         } else {
             paths.fullySelected = selected;
@@ -160,7 +161,7 @@
             //paths.addChild(circle);
         }
         //removeSmallBits(path);
-        
+
         return paths;
     }
 

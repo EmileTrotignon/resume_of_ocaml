@@ -1,0 +1,9 @@
+<%# current %>
+<_% let navmenu_item name url =
+     {%eml|<a class="button<% ( if (String.equal name current) then (%> current<%)) ; %>" href="<%-url%>"><%-name%></a>|} in %_>
+<section id="navmenu">
+    <_%- navmenu_item "Index" "/" %_>
+    <_%- navmenu_item "Software" "/software" %_>
+    <_%- navmenu_item "Resume" "/resume_en" %_>
+</section>
+

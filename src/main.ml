@@ -1,8 +1,6 @@
 open Core
 open Resume_lib
 
-let rec lst = 0 :: lst
-
 let () =
   Out_channel.write_all "fr.tex"
     ~data:(Resume_builder.to_latex Instance.emile Multi_string.French) ;
