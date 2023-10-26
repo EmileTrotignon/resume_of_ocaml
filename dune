@@ -47,4 +47,5 @@
  (mode
   (promote
    (into site/js)))
-  (action (copy src/jsoo/blog_loader.bc.js blog_loader.js)))
+ (action
+  (copy src/jsoo/blog_loader.bc.js blog_loader.js)))

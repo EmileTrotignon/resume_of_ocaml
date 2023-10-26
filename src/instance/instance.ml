@@ -102,14 +102,16 @@ let emile =
                       Les technologies utilisées sont Node.js et Express.js. J'ai notamment mis en place un système \
                       pour remplir automatiquement le formulaire de CV d'un utilisateur avec son CV Linkedin sous \
                       format PDF.\n\
-                      Le site d'Expert People : "; f "url" "https://expertpeople.co/" ]
+                      Le site d'Expert People : "
+                 ; f "url" "https://expertpeople.co/" ]
                ~english:
                  [ S
                      "During a six week mission for the junior entreprise of ENS Paris-Saclay, I contributed to the \
                       website development of Expert People, a new freelancing platform. The technologies used were \
                       Node.js and Express.js. One of my achievements was parsing LinkedIn resumes in PDF format to \
                       auto-fill the resume form.\n\
-                      Expert People's website (in french) : "; f "url" "https://expertpeople.co/" ] )
+                      Expert People's website (in french) : "
+                 ; f "url" "https://expertpeople.co/" ] )
           (v ~french:"Junior entreprise de l'ENS Paris-Saclay" ~english:"Junior entreprise of ENS Paris-Saclay")
           (v ~french:"Mars 2020" ~english:"March 2020")
       ; experience (I "ICPC SWERC 2019-2020") (I "")
@@ -154,7 +156,8 @@ let emile =
                ~french:
                  [ S
                      " Lors d'un emploi estival d'un mois, j'ai contribué à l'intégration du nouveau site web de \
-                      l'ENSSIB. Le nouveau site est visible ici :"; f "url" "http://www.enssib.fr/" ]
+                      l'ENSSIB. Le nouveau site est visible ici :"
+                 ; f "url" "http://www.enssib.fr/" ]
                ~english:
                  [ S
                      "For a month, I contributed to the graphical integration of the new website for ENSSIB, the \
@@ -170,11 +173,13 @@ let emile =
                ~french:
                  [ S
                      "La compilation des langages de programmation est un sujet qui m'intéresse beaucoup. Dans ce \
-                      domaine, j'ai écris un type checker pour le système de type f-omega lors d'un cours de M2. Le code \
-                      est disponible ici :"; f "url" "https://github.com/EmileTrotignon/f-omega"
+                      domaine, j'ai écris un type checker pour le système de type f-omega lors d'un cours de M2. Le \
+                      code est disponible ici :"
+                 ; f "url" "https://github.com/EmileTrotignon/f-omega"
                  ; S
                      "Lors d'un cours de M1 j'ai écris un compilateur pour un language de programmation du style ML \
-                      vers X86."; S ".\nLe code est disponilble ici : "
+                      vers X86."
+                 ; S ".\nLe code est disponilble ici : "
                  ; f "url" "https://github.com/EmileTrotignon/cours-compilation-p7"
                  ; S ".\nJ'ai aussi programmé en 2019 un compilateur pour un sous-ensemble du langage C vers X86 : "
                  ; f "url" "https://github.com/EmileTrotignon/mcc" ]
@@ -185,7 +190,8 @@ let emile =
                  ; f "url" "https://github.com/EmileTrotignon/f-omega"
                  ; S
                      "For a M1 course, I have written a compiler for an ML-style langage to X86. The code is available \
-                      here :"; f "url" "https://github.com/EmileTrotignon/cours-compilation-p7"
+                      here :"
+                 ; f "url" "https://github.com/EmileTrotignon/cours-compilation-p7"
                  ; S ".\nI have also programmed a compiler for a subset of the C language to X86 in 2019 : "
                  ; f "url" "https://github.com/EmileTrotignon/mcc" ] )
       ; skill

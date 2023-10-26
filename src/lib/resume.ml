@@ -27,22 +27,11 @@ type t' =
   ; birthdate: string }
 
 let to_t' ?(escaper = Core.Fn.id) language model
-    ({ intro
-     ; formations
-     ; experiences
-     ; skills
-     ; languages
-     ; firstname
-     ; lastname
-     ; phonenumber
-     ; email
-     ; website
-     ; birthdate } :
+    ({intro; formations; experiences; skills; languages; firstname; lastname; phonenumber; email; website; birthdate} :
       t ) : t' =
   { intro= escaper (Multi_string.to_string language intro)
   ; formations= List.map ~f:(Formation.to_t' ~escaper language model) formations
-  ; experiences=
-      List.map ~f:(Experience.to_t' ~escaper language model) experiences
+  ; experiences= List.map ~f:(Experience.to_t' ~escaper language model) experiences
   ; skills= List.map ~f:(Skill.to_t' ~escaper language model) skills
   ; languages= List.map ~f:(Language.to_t' ~escaper language) languages
   ; firstname= escaper (Multi_string.to_string language firstname)
@@ -52,16 +41,6 @@ let to_t' ?(escaper = Core.Fn.id) language model
   ; website= escaper (Multi_string.to_string language website)
   ; birthdate= escaper (Multi_string.to_string language birthdate) }
 
-let make ~intro ~formations ~experiences ~skills ~languages ~firstname ~lastname
-    ~phonenumber ~email ~website ~birthdate : t =
-  { intro
-  ; formations
-  ; experiences
-  ; skills
-  ; languages
-  ; firstname
-  ; lastname
-  ; phonenumber
-  ; email
-  ; website
-  ; birthdate }
+let make ~intro ~formations ~experiences ~skills ~languages ~firstname ~lastname ~phonenumber ~email ~website ~birthdate
+    : t =
+  {intro; formations; experiences; skills; languages; firstname; lastname; phonenumber; email; website; birthdate}

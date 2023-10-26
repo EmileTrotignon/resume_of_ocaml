@@ -18,36 +18,21 @@ type t' =
   ; date_end: string
   ; result: string }
 
-let to_t' ?(escaper = Fn.id) language model
-    ({school; diploma; description; location; date_start; date_end; result} : t)
+let to_t' ?(escaper = Fn.id) language model ({school; diploma; description; location; date_start; date_end; result} : t)
     : t' =
   { school= escaper (Multi_string.to_string language school)
   ; diploma= escaper (Multi_string.to_string language diploma)
   ; description=
       ( match description with
       | Some description ->
-          escaper
-            (Runtime_template.render
-               (Multi_string.to_string language description)
-               model )
-      | None -> "" )
-  ; location=
-      ( match location with
-      | Some location -> escaper (Multi_string.to_string language location)
-      | None -> "" )
+          escaper (Runtime_template.render (Multi_string.to_string language description) model)
+      | None ->
+          "" )
+  ; location= (match location with Some location -> escaper (Multi_string.to_string language location) | None -> "")
   ; date_start=
-      ( match date_start with
-      | Some date_start -> escaper (Multi_string.to_string language date_start)
-      | None -> "" )
-  ; date_end=
-      ( match date_end with
-      | Some date_end -> escaper (Multi_string.to_string language date_end)
-      | None -> "" )
-  ; result=
-      ( match result with
-      | Some result -> escaper (Multi_string.to_string language result)
-      | None -> "" ) }
+      (match date_start with Some date_start -> escaper (Multi_string.to_string language date_start) | None -> "")
+  ; date_end= (match date_end with Some date_end -> escaper (Multi_string.to_string language date_end) | None -> "")
+  ; result= (match result with Some result -> escaper (Multi_string.to_string language result) | None -> "") }
 
-let make ?description ?location ?date_start ?date_end ?result school diploma : t
-    =
+let make ?description ?location ?date_start ?date_end ?result school diploma : t =
   {school; diploma; description; location; date_start; date_end; result}

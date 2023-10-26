@@ -24,12 +24,7 @@ type t' =
   ; website: string
   ; birthdate: string }
 
-val to_t' :
-     ?escaper:(string -> string)
-  -> Multi_string.language
-  -> Runtime_template.model
-  -> t
-  -> t'
+val to_t' : ?escaper:(string -> string) -> Multi_string.language -> Runtime_template.model -> t -> t'
 
 val make :
      intro:string Multi_string.t
