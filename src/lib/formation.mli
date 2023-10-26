@@ -16,7 +16,12 @@ type t' =
   ; date_end: string
   ; result: string }
 
-val to_t' : ?escaper:(string -> string) -> Multi_string.language -> Runtime_template.model -> t -> t'
+val to_t' :
+     ?escaper:(string -> string)
+  -> Multi_string.language
+  -> Runtime_template.model
+  -> t
+  -> t'
 
 val make :
      ?description:Runtime_template.elt list Multi_string.t

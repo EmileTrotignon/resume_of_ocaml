@@ -5,9 +5,19 @@ type t =
   ; location: string Multi_string.t option
   ; date: string Multi_string.t }
 
-type t' = {title: string; description: string; company: string; location: string; date: string}
+type t' =
+  { title: string
+  ; description: string
+  ; company: string
+  ; location: string
+  ; date: string }
 
-val to_t' : ?escaper:(string -> string) -> Multi_string.language -> Runtime_template.model -> t -> t'
+val to_t' :
+     ?escaper:(string -> string)
+  -> Multi_string.language
+  -> Runtime_template.model
+  -> t
+  -> t'
 
 val make :
      string Multi_string.t

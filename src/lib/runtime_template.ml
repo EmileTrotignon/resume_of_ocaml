@@ -19,7 +19,10 @@ let render template (model : model) =
             append s
         | F (fname, s) ->
             let _, f =
-              match List.find model ~f:(fun (fname', _) -> String.( = ) fname fname') with
+              match
+                List.find model ~f:(fun (fname', _) ->
+                    String.( = ) fname fname' )
+              with
               | Some f' ->
                   f'
               | None ->
