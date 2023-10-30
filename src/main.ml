@@ -13,4 +13,9 @@ let () =
   Out_channel.write_all "index.html"
     ~data:
       (Templates.Site.index
+         (Resume_builder.to_html Instance.emile Multi_string.English) ) ;
+  Out_channel.write_all "404.html"
+    ~data:
+      (Templates.Site.page_404
          (Resume_builder.to_html Instance.emile Multi_string.English) )
+  

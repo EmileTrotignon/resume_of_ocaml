@@ -1,4 +1,5 @@
-(executable
+(executables
  (modes js)
- (name blog_loader)
+ (names blog_loader script_404)
  (libraries brr))
+

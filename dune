@@ -10,7 +10,7 @@
   (run sass site/style.sass style.css)))
 
 (rule
- (targets fr.tex en.tex resume_en.html index.html)
+ (targets fr.tex en.tex resume_en.html index.html 404.html)
  (alias site)
  (deps src/main.exe)
  (mode
