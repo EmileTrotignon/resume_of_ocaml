@@ -15,6 +15,7 @@
     var voronoi =  new Voronoi();
     var sites = generateBeeHivePoints(view.size / 75, true);
     var speeds = generateSpeeds(view.size / 75);
+    console.log(speeds);
     var forces = generateSpeeds(view.size / 75);
     var bbox, diagram;
     var oldSize = view.size;
@@ -52,7 +53,11 @@
         else
           speeds[i] *= -1;
         //sites[i] = moveToRect(sites[i], new Rectangle(new Point(bbox.xl, bbox.yt), new Point(bbox.xr, bbox.yb)));
+        var length = Math.sqrt(speeds[i].x * speeds[i].x + speeds[i].y * speeds[i].y);
         speeds[i] += forces[i];
+        var new_length = Math.sqrt(speeds[i].x * speeds[i].x + speeds[i].y * speeds[i].y);
+        speeds[i].x = speeds[i].x * length / new_length;
+        speeds[i].y = speeds[i].y * length / new_length; 
         forces[i] = (Point.random() - new Point(0.5, 0.5)) / 100;
       }
     }
@@ -130,7 +135,7 @@
       var points = [];
         for(var i = -1; i < size.width + 1; i++) {
             for(var j = -1; j < size.height + 1; j++) {
-                var speed = new Point(0, 0);
+                var speed = new Point(Math.random()/8, Math.random()/4);
                 points.push(speed);
             }
         }

@@ -6,9 +6,9 @@ let () =
     ~data:(Resume_builder.to_latex Instance.emile Multi_string.French) ;
   Out_channel.write_all "en.tex"
     ~data:(Resume_builder.to_latex Instance.emile Multi_string.English) ;
-  Out_channel.write_all "resume_en.html"
+  Out_channel.write_all "resume.html"
     ~data:
-      (Templates.Site.resume_en
+      (Templates.Site.resume
          (Resume_builder.to_html Instance.emile Multi_string.English) ) ;
   Out_channel.write_all "index.html"
     ~data:

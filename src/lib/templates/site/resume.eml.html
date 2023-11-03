@@ -16,7 +16,8 @@ let icon_of_string s =
   | "c#" -> "<img src='icons/c-sharp-icon.svg' class='icon'>"
   | "python" -> "<img src='icons/python-icon.svg' class='icon'>"
   | _ -> ""
-  in
+in
+let breadcrumbs = Breadcrumbs.of_string_list ["resume"] in
 %>
 <%- page_top cv %>
       <%- Components.sidebar_top %>
@@ -66,6 +67,7 @@ let icon_of_string s =
         <% ) ) cv.skills ; %>
       </section>
       <%- Components.sidebar_bot %>
+      <%- Components.breadcrumbs breadcrumbs %>
       <div id="content-wrapper">
         <article id="content">
           <section>

@@ -1,9 +1,13 @@
 <%# (cv: Resume.t') %>
+<% 
+let breadcrumbs = Breadcrumbs.of_string_list [] in
+%> 
 <%- page_top cv %>
     <%- Components.sidebar_top %>
         <%- Components.navmenu "Index" %>
         <%- Components.contact cv %>
     <%- Components.sidebar_bot %>
+    <%- Components.breadcrumbs breadcrumbs %>
     <div id="content-wrapper">
         <article id="content">
             <section>
