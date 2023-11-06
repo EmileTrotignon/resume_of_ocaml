@@ -1,6 +1,0 @@
-<%# (breadcrumbs: (string list * string) list) %>
-<ul id="breadcrumbs">
-    <_% ( breadcrumbs |> List.iter (fun (path, name) ->%_>
-        <li><a href="/<%- String.concat "/" path %>"><%- name %></a></li>
-    <_% )) ; %>
-</ul> 

@@ -22,11 +22,14 @@ let suffix_md_to_html link =
 let html_of_markdown ~path (md : string) =
   let open Resume_lib in
   let breadcrumbs = path |> List.rev |> Breadcrumbs.of_string_list in
-  Templates.Site.blog
-    (Resume_builder.to_html Instance.emile Multi_string.English)
-    Omd.(
-      md |> of_string |> Omd_helpers.(Map_link.doc suffix_md_to_html) |> to_html )
-    breadcrumbs
+  Html.to_string
+  @@ Html.blog
+       (Resume_builder.to_html Instance.emile Multi_string.English)
+       Omd.(
+         md |> of_string
+         |> Omd_helpers.(Map_link.doc suffix_md_to_html)
+         |> to_html )
+       breadcrumbs
 
 let rec load_dir ~path file : (content, Rresult.R.msg) result =
   let* sub = OS.Dir.contents file |> add_msg ~msg:"load_dir: OS.Dir.contents" in

@@ -1,6 +1,6 @@
 (library
  (name resume_lib)
- (libraries core embedded_ocaml_templates.EML_runtime)
+ (libraries core embedded_ocaml_templates.EML_runtime tyxml)
  (preprocess
   (pps embedded_ocaml_templates.ppx_eml))
  (flags :standard -w +39))
