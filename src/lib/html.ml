@@ -6,7 +6,7 @@ let breadcrumbs bc =
     ~a:[a_id "breadcrumbs"]
     (List.map
        (fun (path, name) ->
-         li [a ~a:[a_href ("/" ^ String.concat "^" path)] [txt name]] )
+         li [a ~a:[a_href ("/" ^ String.concat "/" path)] [txt name]] )
        bc )
 
 let contact (cv : Resume.t') =
@@ -276,7 +276,8 @@ let page (cv : Resume.t') content =
                [ a
                    ~a:[a_href "/"]
                    [txt {%eml|<%- cv.firstname %> <%- cv.lastname %>|}] ] ]
-       ; div ~a:[a_id "body"] content ] )
+       ; div ~a:[a_id "body"] content
+       ; script ~a:[a_src "/highlight.js"] (txt "") ] )
 
 let resume (cv : Resume.t') =
   let icon_of_string s =

@@ -19,30 +19,55 @@ let suffix_md_to_html link =
     String.sub link 0 (String.length link - 3) ^ ".html"
   else link
 
-let html_of_markdown ~path (md : string) =
+let html_into_page ~path html =
   let open Resume_lib in
   let breadcrumbs = path |> List.rev |> Breadcrumbs.of_string_list in
   Html.to_string
   @@ Html.blog
        (Resume_builder.to_html Instance.emile Multi_string.English)
-       Omd.(
-         md |> of_string
-         |> Omd_helpers.(Map_link.doc suffix_md_to_html)
-         |> to_html )
-       breadcrumbs
+       html breadcrumbs
+
+let html_of_markdown ~path (md : string) =
+  html_into_page ~path
+    Omd.(
+      md |> of_string |> Omd_helpers.(Map_link.doc suffix_md_to_html) |> to_html )
+
+let auto_index ~path file (sub_files : Fpath.t list) =
+  let open Tyxml.Html in
+  let html =
+    section
+      [ h1 [txt (Fpath.basename file)]
+      ; ul
+          (List.map
+             (fun sub_file ->
+               li
+                 [ a
+                     ~a:[a_href (Fpath.basename sub_file)]
+                     [txt (Fpath.basename sub_file)] ] )
+             sub_files ) ]
+  in
+  html_into_page ~path (Format.asprintf "%a" (pp_elt ()) html)
 
 let rec load_dir ~path file : (content, Rresult.R.msg) result =
   let* sub = OS.Dir.contents file |> add_msg ~msg:"load_dir: OS.Dir.contents" in
   let index, sub = List.partition is_index sub in
-  let* index =
+  let* index_html =
     match index with
     | [index] ->
-        Ok index
-    | _ ->
-        Error (`Msg "No file named readme.md in dir")
+        let* index_md =
+          OS.File.read index |> add_msg ~msg:"load_dir: OS.File.read"
+        in
+        Ok (html_of_markdown ~path index_md)
+    | [] ->
+        Ok (auto_index ~path file sub)
+    | _ :: _ ->
+        Error
+          (`Msg
+            (Format.asprintf
+               "Found multiple file named readme.md in dir %a. Should not \
+                happen."
+               Fpath.pp file ) )
   in
-  let* index_md = OS.File.read index |> add_msg ~msg:"load_dir: OS.File.read" in
-  let index_html = html_of_markdown ~path index_md in
   let+ sub = list_map (load ~path) sub in
   Dir {index_html: string; sub}
 

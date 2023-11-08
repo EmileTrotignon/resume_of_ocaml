@@ -1,6 +1,6 @@
 (executable
  (name main)
- (libraries core resume_lib instance tyxml )
+ (libraries core resume_lib instance tyxml)
  (preprocess
   (pps embedded_ocaml_templates.ppx_eml))
  (flags :standard -w +39))

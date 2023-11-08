@@ -1,5 +1,5 @@
 (executables
  (modes js)
- (names blog_loader script_404)
- (libraries brr))
+ (names blog_loader script_404 highlight)
+ (libraries brr highlexer))
 

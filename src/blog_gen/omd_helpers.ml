@@ -68,5 +68,3 @@ module Map_link = struct
 
   and doc f (d : doc) : doc = List.map (block f) d
 end
-
-
