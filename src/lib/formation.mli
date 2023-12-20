@@ -1,7 +1,7 @@
 type t =
   { school: string Multi_string.t
   ; diploma: string Multi_string.t
-  ; description: Runtime_template.t Multi_string.t option
+  ; description: Cmarkit.Doc.t Multi_string.t option
   ; location: string Multi_string.t option
   ; date_start: string Multi_string.t option
   ; date_end: string Multi_string.t option
@@ -19,12 +19,12 @@ type t' =
 val to_t' :
      ?escaper:(string -> string)
   -> Multi_string.language
-  -> Runtime_template.model
+  -> (Cmarkit.Doc.t -> string)
   -> t
   -> t'
 
 val make :
-     ?description:Runtime_template.elt list Multi_string.t
+     ?description:Cmarkit.Doc.t Multi_string.t
   -> ?location:string Multi_string.t
   -> ?date_start:string Multi_string.t
   -> ?date_end:string Multi_string.t

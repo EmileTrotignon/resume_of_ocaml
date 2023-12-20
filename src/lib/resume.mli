@@ -27,7 +27,7 @@ type t' =
 val to_t' :
      ?escaper:(string -> string)
   -> Multi_string.language
-  -> Runtime_template.model
+  -> (Cmarkit.Doc.t -> string)
   -> t
   -> t'
 

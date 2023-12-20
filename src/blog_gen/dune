@@ -1,6 +1,6 @@
 (executable
  (name main)
  (public_name blog_gen)
- (libraries resume_lib instance cmdliner tyxml bos omd)
+ (libraries resume_lib instance cmdliner tyxml bos cmarkit)
  (preprocess
   (pps ppx_deriving.show)))

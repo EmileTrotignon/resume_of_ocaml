@@ -344,7 +344,7 @@ let resume (cv : Resume.t') =
           ~a:[a_class ["subtitle"]]
           ( (if f.location <> "" then [txt (f.location ^ ", ")] else [])
           @ [txt (f.date_start ^ " - " ^ f.date_end)] )
-      ; p [txt (f.diploma ^ if f.result <> "" then " - " else "" ^ f.result)]
+      ; p [txt (f.diploma ^ if f.result <> "" then " - " ^ f.result else "" )]
       ; p [txt f.description] ]
   in
   let experience (e : Experience.t') =

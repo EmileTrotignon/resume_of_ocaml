@@ -3,7 +3,7 @@ open Core
 type t =
   { school: string Multi_string.t
   ; diploma: string Multi_string.t
-  ; description: Runtime_template.t Multi_string.t option
+  ; description: Cmarkit.Doc.t Multi_string.t option
   ; location: string Multi_string.t option
   ; date_start: string Multi_string.t option
   ; date_end: string Multi_string.t option
@@ -18,7 +18,7 @@ type t' =
   ; date_end: string
   ; result: string }
 
-let to_t' ?(escaper = Fn.id) language model
+let to_t' ?(escaper = Fn.id) language md_printer
     ({school; diploma; description; location; date_start; date_end; result} : t)
     : t' =
   { school= escaper (Multi_string.to_string language school)
@@ -26,10 +26,7 @@ let to_t' ?(escaper = Fn.id) language model
   ; description=
       ( match description with
       | Some description ->
-          escaper
-            (Runtime_template.render
-               (Multi_string.to_string language description)
-               model )
+           (md_printer (Multi_string.to_string language description))
       | None ->
           "" )
   ; location=

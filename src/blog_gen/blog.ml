@@ -29,8 +29,9 @@ let html_into_page ~path html =
 
 let html_of_markdown ~path (md : string) =
   html_into_page ~path
-    Omd.(
-      md |> of_string |> Omd_helpers.(Map_link.doc suffix_md_to_html) |> to_html )
+    ( md |> Cmarkit.Doc.of_string
+    |> Md_helpers.(map_link suffix_md_to_html)
+    |> Cmarkit_html.of_doc ~safe:false )
 
 let auto_index ~path file (sub_files : Fpath.t list) =
   let open Tyxml.Html in
