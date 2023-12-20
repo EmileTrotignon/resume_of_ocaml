@@ -1,0 +1,28 @@
+(rule
+ (target style.css)
+ (deps
+  (file style.sass))
+ (aliases style site)
+ (action
+  (run sass style.sass style.css)))
+
+(rule
+ (targets fr.tex en.tex resume.html index.html 404.html software.html)
+ (alias site)
+ (deps ../src/main.exe Gemfile Gemfile.lock _config.yml)
+ (action
+  (run ../src/main.exe)))
+
+(rule
+ (aliases site blog)
+ (deps
+  (source_tree ../blog))
+ (targets
+  (dir blog))
+ (action
+  (run blog_gen ../blog .)))
+
+(rule
+ (aliases site script)
+ (action
+  (copy ../src/jsoo/highlight.bc.js ./highlight.js)))

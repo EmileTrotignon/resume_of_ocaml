@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Émile Trotignon's personal page</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap" rel="stylesheet">
+
+    <script src="/js/rhill-voronoi-core.js"></script>
+    <script src="https://kit.fontawesome.com/0c027fe19b.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.11/paper-full.min.js"></script>
+    <script type="text/paperscript"  canvas="canvas-1">
+    var voronoi =  new Voronoi();
+    var sites = generateBeeHivePoints(view.size / 75, true);
+    var speeds = generateSpeeds(view.size / 75);
+    var forces = generateSpeeds(view.size / 75);
+    var bbox, diagram;
+    var oldSize = view.size;
+    var spotColor = new Color('rgba(240, 84, 76, 0.66)');
+    var mousePos = view.center;
+    var selected = false;
+
+    onResize();
+
+    function onMouseDown(event) {
+        sites.push(event.point);
+        renderDiagram();
+    }
+
+    function onMouseMove(event) {
+        mousePos = event.point;
+        mousePos.speed = new Point(0.0);
+        mousePos.force = new Point(0.0);
+        if (event.count == 0)
+        {
+            sites.push(mousePos);
+            speeds.push(new Point(0,0));
+            forces.push(new Point(0,0));
+        }
+
+        sites[sites.length - 1] = mousePos;
+        speeds[speeds.length - 1] = new Point(0,0);
+        forces[forces.length - 1] = new Point(0,0);
+    }
+
+    function moveSites() {
+      for (var i = 0; i < sites.length; i++) {
+        if ((sites[i] + speeds[i]).isInside(new Rectangle(new Point(bbox.xl, bbox.yt), new Point(bbox.xr, bbox.yb))))
+          sites[i] += speeds[i];
+        else
+          speeds[i] *= -1;
+        //sites[i] = moveToRect(sites[i], new Rectangle(new Point(bbox.xl, bbox.yt), new Point(bbox.xr, bbox.yb)));
+        speeds[i] += forces[i];
+        forces[i] = (Point.random() - new Point(0.5, 0.5)) / 100;
+      }
+    }
+
+    function moveToRect(point, rect) {
+      point2 = new Point(point);
+      while(!point2.isInside(rect)) {
+        if (point2.x < rect.left)
+          point2.x += rect.width;
+        if (point2.x > rect.right)
+          point2.x -= rect.width;
+        if (point2.y < rect.top)
+          point2.y += rect.height;
+        if (point2.y > rect.bottom)
+          point2.y -= rect.height;
+      }
+      return point2;
+    }
+
+    function renderDiagram() {
+        project.activeLayer.children = [];
+        moveSites();
+        var diagram = voronoi.compute(sites, bbox);
+        if (diagram) {
+            for (var i = 0, l = sites.length; i < l; i++) {
+                var cell = diagram.cells[sites[i].voronoiId];
+                if (cell) {
+                    var halfedges = cell.halfedges,
+                        length = halfedges.length;
+                    if (length > 2) {
+                        var points = [];
+                        for (var j = 0; j < length; j++) {
+                            v = halfedges[j].getEndpoint();
+                            points.push(new Point(v));
+                        }
+                        createPath(points, sites[i]);
+                    }
+                }
+            }
+        }
+    }
+
+    function removeSmallBits(path) {
+        var averageLength = path.length / path.segments.length;
+        var min = path.length / 50;
+        for(var i = path.segments.length - 1; i >= 0; i--) {
+            var segment = path.segments[i];
+            var cur = segment.point;
+            var nextSegment = segment.next;
+            var next = nextSegment.point + nextSegment.handleIn;
+            if (cur.getDistance(next) < min) {
+                segment.remove();
+            }
+        }
+    }
+
+    function generateBeeHivePoints(size, loose) {
+        var points = [];
+        var col = view.size / size;
+        for(var i = -1; i < size.width + 1; i++) {
+            for(var j = -1; j < size.height + 1; j++) {
+                var point = new Point(i, j) / new Point(size) * view.size + col / 2;
+                if(j % 2)
+                    point += new Point(col.width / 2, 0);
+                if(loose)
+                    point += (col) * Point.random() - col / 4;
+                points.push(point);
+            }
+        }
+        return points;
+    }
+
+    function generateSpeeds(size)
+    {
+      var points = [];
+        for(var i = -1; i < size.width + 1; i++) {
+            for(var j = -1; j < size.height + 1; j++) {
+                var speed = new Point(0, 0);
+                points.push(speed);
+            }
+        }
+        return points;
+    }
+
+    function createPath(points, center) {
+        var paths = new CompoundPath();
+        if (!selected) {
+            paths.strokeColor = spotColor;
+        } else {
+            paths.fullySelected = selected;
+        }
+        //paths.closed = true;
+
+        for (var i = 0, l = points.length; i < l; i++) {
+            var point = points[i];
+            var next = points[(i + 1) == points.length ? 0 : i + 1];
+            var prec = points[(i - 1) == 0 ? points.length -1 : i - 1];
+            var vector = (next - point) / 2;
+            var path = new Path.Line(point, next);
+            path.scale(0.66);
+
+            //var circle = new Path.Circle(point, 1);
+            //circle.fillColor = new Color("white");
+            paths.addChild(path);
+            //paths.addChild(circle);
+        }
+        //removeSmallBits(path);
+
+        return paths;
+    }
+
+    function onResize() {
+        var margin = 0;
+        bbox = {
+            xl: margin,
+            xr: view.bounds.width - margin,
+            yt: margin,
+            yb: view.bounds.height - margin
+        };
+        for (var i = 0, l = sites.length; i < l; i++) {
+            sites[i] = sites[i] * view.size / oldSize;
+        }
+        oldSize = view.size;
+    }
+    function onFrame(event) {
+        renderDiagram();
+    }
+    /*function onKeyDown(event) {
+        if (event.key == 'space') {
+            selected = !selected;
+            renderDiagram();
+        }
+    }*/
+    </script>
+  </head>
+  <body>
+    <header>
+      <canvas resize="true" id="canvas-1" style="user-select: none;" data-paper-scope="1"></canvas>
+      <h1>
+        <a href="/">Émile Trotignon</a>
+      </h1>
+    </header>
+    <div id="body">
+    <nav id="sidebar">
+        <section id="navmenu"><a 
+        class="button
+                current
+              "
+        
+        href="/">Index</a><a 
+        class="button
+               
+              "
+        
+        href="/software">Software</a><a 
+        class="button
+               
+              "
+        
+        href="/resume_en">Resume</a><a 
+        class="button
+               
+              "
+        
+        id="blog-navlink"         
+        
+        href="/blog">Blog</a></section>
+
+
+        
+<section>
+    <p>
+        <a href="https://github.com/EmileTrotignon"><img src="/icons/github-icon.svg" class="icon"> GitHub </a>
+    </p>
+    <p>
+        <a href="mailto:emile.trotignon@gmail.com"><span class="icon"><i class="fas fa-envelope fa-lg"></i></span> emile.trotignon@gmail.com</a>
+    </p>
+    <p>
+        <span class="icon"><i class="fas fa-phone fa-lg"></i></span> +33 7 82 89 83 58
+    </p>
+    <p>
+        Born July 30th, 1999
+    </p>
+</section>
+    </nav>
+    <div id="content-wrapper">
+        <article id="content">
+            <section>
+                <p>
+                    Welcome to my home page.
+                </p>
+                <p>
+                    I used to be a student in computer science at ENS Paris-Saclay, nowadays I am a dev at Tarides,
+                    were I work on tools for ocaml like odoc and ocamlformat.
+                    
+                    I am very interested in the OCaml language and programming languages in general.
+                    You can check some of my projects out on my <a href="https://github.com/EmileTrotignon">github</a>,
+                    and my resume on this website.
+                </p>
+            </section>
+        </article>
+    </div>
+
+        
+        
+        
+        </div>
+        <footer>
+            
+        </footer>
+    </body>
+</html>

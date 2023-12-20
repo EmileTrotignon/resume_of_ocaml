@@ -1,0 +1,16 @@
+(rule
+ (deps
+  (file ../en.tex))
+ (targets en.pdf)
+ (alias site)
+ (action
+  (run pdflatex ../en.tex)))
+
+(rule
+ (deps
+  (file ../fr.tex))
+ (targets fr.pdf)
+ (alias site)
+ (mode promote)
+ (action
+  (run pdflatex ../fr.tex)))

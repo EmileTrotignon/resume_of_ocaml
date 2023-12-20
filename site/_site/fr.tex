@@ -1,0 +1,121 @@
+
+\documentclass[10pt, a4paper, roman, french]{moderncv}
+\moderncvstyle{classic}
+\moderncvcolor{purple}
+\usepackage[utf8]{inputenc}
+\usepackage[light]{CormorantGaramond}
+\usepackage[T1]{fontenc}
+\usepackage[scale=1,a4paper]{geometry}
+\usepackage{babel}
+\usepackage{geometry}
+\usepackage{tikz}
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+
+
+\definecolor{white}{HTML}{DDDDDD}
+\definecolor{gray}{HTML}{404040}
+\definecolor{purple}{HTML}{8054cc}
+
+\DeclareRobustCommand{\skills}[1]{
+    \texorpdfstring{\protect\tikz[baseline]{
+		\filldraw[fill=white, draw=gray] (0,0) rectangle (5,0.175);
+		\draw[fill=purple](0,0) rectangle ({#1},0.175);
+    }}{skill level {#1}}
+}
+
+%----------------------------------------------------------------------------------
+%            informations personnelles
+%type t' = {
+%  title : string;
+%  description : string;
+%  company : string;
+%  location : string;
+%  date : string;
+%}
+%----------------------------------------------------------------------------------
+\firstname{Émile}
+\familyname{Trotignon}
+\mobile{+33 7 82 89 83 58}
+\extrainfo{Né le 30 juillet 1999}
+\email{emile.trotignon@gmail.com}
+% \photo[64pt][0.4pt]{Image} %
+\begin{document}
+
+	\makecvtitle
+	Étudiant en informatique à l'ENS Paris-Saclay, je suis très interessé par OCaml et plus généralement par les langues de programmation et la compilation.
+	\section{Formation}
+	
+		\cventry{2020 -- 2022 }{Master Parisien de Recherche en Informatique}{École Normale Supérieure Paris-Saclay}{}{}{}
+	
+		\cventry{2019 -- 2020 }{L3 Informatique}{École Normale Supérieure Paris-Saclay}{}{}{}
+	
+		\cventry{2018 -- 2019 }{L2 Informatique - mathématiques}{Université Lyon 1 Claude-Bernard}{}{}{}
+	
+		\cventry{2017 -- 2018 }{CPGE MPSI}{Lycée Jean Perrin (Option Informatique au Lycée du Parc)}{}{}{}
+	
+		\cventry{2016 -- 2017 }{Baccalauréat scientifique}{Lycée La Trinité}{}{}{}
+	
+
+	\section{Expérience}
+	
+		\cventry{Printemps 2022}{Stage de recherche en informatique }{OCamlpro, équipe Flambda}{Paris, France}{}{Stage de 4.5 mois supervisé par Vincent Laviron et Pierre Chambart. Généralisation de l'optimisation des appel récursifs en queue modulo constructeurs.}
+	 
+		\cventry{Printemps 2021}{Stage de recherche en informatique }{Inria Paris, équipe Cambium}{Paris, France}{}{Stage de M1 de 5 mois encadré par François Pottier. Améliorations de Menhir, un générateur de parser LR(1) pour OCaml :
+Augmentation de la sécurité grâce aux GADTs, ce qui autorises des optimisation plus aggresives. Nombre d'allocations divisée par 4 et vitesse augmentée de 10\%, sur des grammaires variées. }
+	 
+		\cventry{Été 2020}{Stage de recherche en géometrie algorithmique }{Laboratoire LIRIS}{Lyon, France}{}{Stage de 6 semaines encadré par David Coeurjolly and Vincent Nivoliers. Le sujet du stage était d'échantillonner la surface d'une mesh potentiellement défectueuse. J'ai beaucoup programmé en C++ pendant ces six semaines. J'ai utilisés des outils tels que Polyscope et LIBIGL. Mon rapport de stage est disponible à cette adresse : \url{https://emiletrotignon.github.io//files/rapport.pdf}}
+	 
+		\cventry{Mars 2020}{Développeur Node.js fullstack }{Junior entreprise de l'ENS Paris-Saclay}{}{}{Dans le cadre d'un mission pour la junior entreprise de l'ENS Paris-Saclay de 6 semaines, j'ai participé au développement du site web d'Expert People, une nouvelle plateforme de freelancing. Les technologies utilisées sont Node.js et Express.js. J'ai notamment mis en place un système pour remplir automatiquement le formulaire de CV d'un utilisateur avec son CV Linkedin sous format PDF.
+Le site d'Expert People : \url{https://expertpeople.co/}}
+	 
+		\cventry{Janvier 2020}{ICPC SWERC 2019-2020 }{}{Télécom Paris}{}{Compétition de programmation/algorithmique universitaire.
+Participation au sein d'une équipe de trois.
+Classement de mon équipe : 37 sur 95 équipes répresentant des universités de plusieurs pays européens.}
+	 
+		\cventry{Été 2019}{Développeur stagiaire C\# }{Eternix Ldt.}{Tel Aviv, Israel}{}{Stage de 2 mois. Écriture de shaders HLSL, découverte de DirectX, Windows Form, expérience avec OpenCV.
+Expérience extrêmement enrichissante dans une entreprise étrangère}
+	 
+		\cventry{Juillet 2018}{Développeur front-end }{École Nationale Supérieure des Sciences de l'Information et des Bibliothèques}{Lyon, France}{}{ Lors d'un emploi estival d'un mois, j'ai contribué à l'intégration du nouveau site web de l'ENSSIB. Le nouveau site est visible ici :\url{http://www.enssib.fr/}}
+	 
+
+	\section{Langues}
+		
+	    \cvitem{Anglais}{Courant}
+		
+	    \cvitem{Français}{Maternel}
+		
+	\section{Compétences techniques}
+	
+		\subsection{Compilation}
+			La compilation des langages de programmation est un sujet qui m'intéresse beaucoup. Dans ce domaine, j'ai écris un type checker pour le système de type f-omega lors d'un cours de M2. Le code est disponible ici :\url{https://github.com/EmileTrotignon/f-omega}Lors d'un cours de M1 j'ai écris un compilateur pour un language de programmation du style ML vers X86..
+Le code est disponilble ici : \url{https://github.com/EmileTrotignon/cours-compilation-p7}.
+J'ai aussi programmé en 2019 un compilateur pour un sous-ensemble du langage C vers X86 : \url{https://github.com/EmileTrotignon/mcc}
+	
+		\subsection{Informatique fondamentale}
+			Durant mes études, j'ai étudié différents aspects de l'informatique théorique :
+Sémantique des langages de programmation, théorie du calcul parallèle en mémoire partagée, langages formels, calculabilité, logique.
+Cela m'apporte beaucoup dans ma compréhension de l'informatique en général, en plus des compétences spécifiques à chaque domaine.
+	
+		\subsection{Programmation fonctionnelle}
+			J'aime beaucoup les langages de programmation fonctionnels, ainsi que les systèmes de type avancés. Je programme en Ocaml depuis le début de mes études, et j'apprécie beaucoup ce langage. J'ai un peu d'expérience en Scala ainsi qu'en Rust, et j'ai beaucoup expérimenté avec les fonctionnalités avancées de C++.
+J'ai aussi publié un paquet sur Opam, le gestionnaire de paquets d'Ocaml : \url{https://github.com/EmileTrotignon/embedded_ocaml_templates}.
+Il contient un réecriveur PPX, ainsi qu'un petit parser écrit avec Menhir.
+	
+		\subsection{Proof assistants and verification}
+			J'ai suivi un cours sur l'assistant de preuve Coq, et l'outil de vérification Why3. Je ne suis pas autonome avec ces outils, mais j'aimerai beaucoup en apprendre plus.
+	
+		\subsection{GUIs}
+			Expérience avec quelques frameworks d'interfaces graphiques :
+Qt et Dear ImGUI pour C++, WinForm pour C\#, Swing pour Scala, Tkinter pour Python
+	
+		\subsection{Développement web}
+			Front-end : Bonne connaissance de HTML/CSS. J'ai exercé cette compétence professionnellement lors de l'été 2018.
+
+Back-end : Expérience professionnelle de développement d'une application Node.js .
+	
+		\subsection{Divers}
+			Utilisation d'un système Unix avec la ligne de commande : manipulation de fichier, Git, SSH.
+Édition d'image avec GIMP.
+Rédaction de documents en Latex. 
+	
+\end{document}
