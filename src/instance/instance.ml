@@ -110,7 +110,7 @@ let emile =
                       mesh. During the six weeks, I spent a good portion of my \
                       time programming in C++ and I used tools such as \
                       Polyscope and LIBIGL. My internship report is available \
-                      here : "
+                      here: "
                  ; f "url" "https://emiletrotignon.github.io/files/rapport.pdf"
                  ] )
           (v ~french:"Laboratoire LIRIS" ~english:"LIRIS laboratory")
@@ -200,7 +200,7 @@ let emile =
                  [ S
                      "For a month, I contributed to the graphical integration \
                       of the new website for ENSSIB, the French school for \
-                      library curators. You can see their website here : "
+                      library curators. You can see their website here: "
                  ; f "url" "http://www.enssib.fr/" ] ) ]
     ~languages:
       [ Language.make (v ~french:"Anglais" ~english:"English") Strong
@@ -219,29 +219,30 @@ let emile =
                  ; S
                      "Lors d'un cours de M1 j'ai écris un compilateur pour un \
                       language de programmation du style ML vers X86."
-                 ; S ".\nLe code est disponilble ici : "
+                 ; S ".\nLe code est disponilble ici: "
                  ; f "url"
                      "https://github.com/EmileTrotignon/cours-compilation-p7"
                  ; S
                      ".\n\
                       J'ai aussi programmé en 2019 un compilateur pour un \
-                      sous-ensemble du langage C vers X86 : "
+                      sous-ensemble du langage C vers X86: "
                  ; f "url" "https://github.com/EmileTrotignon/mcc" ]
                ~english:
                  [ S
                      "I am very interested in compilation. In this domain, for \
                       a M2 course, I have written a type checker for the \
-                      f-omega type system. The code is available here :"
+                      f-omega type system. The code is available here:"
                  ; f "url" "https://github.com/EmileTrotignon/f-omega"
                  ; S
-                     "For a M1 course, I have written a compiler for an \
-                      ML-style langage to X86. The code is available here :"
+                     ".\n\
+                      For a M1 course, I have written a compiler for an \
+                      ML-style langage to X86. The code is available here:"
                  ; f "url"
                      "https://github.com/EmileTrotignon/cours-compilation-p7"
                  ; S
                      ".\n\
                       I have also programmed a compiler for a subset of the C \
-                      language to X86 in 2019 : "
+                      language to X86 in 2019: "
                  ; f "url" "https://github.com/EmileTrotignon/mcc" ] )
       ; skill
           (v ~french:"Informatique fondamentale"

@@ -55,7 +55,6 @@ let page (cv : Resume.t') content =
           (txt {%eml|<%- cv.firstname %> <%- cv.lastname %>'s personal page|}) )
        [ meta ~a:[a_charset "utf-8"] ()
        ; link ~rel:[`Stylesheet] ~href:"/style.css" ()
-       ; link ~rel:[`Stylesheet] ~href:"/style.css" ()
        ; link ~rel:[`Stylesheet]
            ~href:
              "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap"
@@ -92,14 +91,14 @@ let page (cv : Resume.t') content =
       var spotColor = new Color('rgba(240, 84, 76, 0.66)');
       var mousePos = view.center;
       var selected = false;
-  
+
       onResize();
-  
+
       function onMouseDown(event) {
           sites.push(event.point);
           renderDiagram();
       }
-  
+
       function onMouseMove(event) {
           mousePos = event.point;
           mousePos.speed = new Point(0.0);
@@ -110,12 +109,12 @@ let page (cv : Resume.t') content =
               speeds.push(new Point(0,0));
               forces.push(new Point(0,0));
           }
-  
+
           sites[sites.length - 1] = mousePos;
           speeds[speeds.length - 1] = new Point(0,0);
           forces[forces.length - 1] = new Point(0,0);
       }
-  
+
       function moveSites() {
         for (var i = 0; i < sites.length; i++) {
           if ((sites[i] + speeds[i]).isInside(new Rectangle(new Point(bbox.xl, bbox.yt), new Point(bbox.xr, bbox.yb))))
@@ -127,11 +126,11 @@ let page (cv : Resume.t') content =
           speeds[i] += forces[i];
           var new_length = Math.sqrt(speeds[i].x * speeds[i].x + speeds[i].y * speeds[i].y);
           speeds[i].x = speeds[i].x * length / new_length;
-          speeds[i].y = speeds[i].y * length / new_length; 
+          speeds[i].y = speeds[i].y * length / new_length;
           forces[i] = (Point.random() - new Point(0.5, 0.5)) / 100;
         }
       }
-  
+
       function moveToRect(point, rect) {
         point2 = new Point(point);
         while(!point2.isInside(rect)) {
@@ -146,7 +145,7 @@ let page (cv : Resume.t') content =
         }
         return point2;
       }
-  
+
       function renderDiagram() {
           project.activeLayer.children = [];
           moveSites();
@@ -169,7 +168,7 @@ let page (cv : Resume.t') content =
               }
           }
       }
-  
+
       function removeSmallBits(path) {
           var averageLength = path.length / path.segments.length;
           var min = path.length / 50;
@@ -183,7 +182,7 @@ let page (cv : Resume.t') content =
               }
           }
       }
-  
+
       function generateBeeHivePoints(size, loose) {
           var points = [];
           var col = view.size / size;
@@ -199,7 +198,7 @@ let page (cv : Resume.t') content =
           }
           return points;
       }
-  
+
       function generateSpeeds(size)
       {
         var points = [];
@@ -211,7 +210,7 @@ let page (cv : Resume.t') content =
           }
           return points;
       }
-  
+
       function createPath(points, center) {
           var paths = new CompoundPath();
           if (!selected) {
@@ -220,7 +219,7 @@ let page (cv : Resume.t') content =
               paths.fullySelected = selected;
           }
           //paths.closed = true;
-  
+
           for (var i = 0, l = points.length; i < l; i++) {
               var point = points[i];
               var next = points[(i + 1) == points.length ? 0 : i + 1];
@@ -228,17 +227,17 @@ let page (cv : Resume.t') content =
               var vector = (next - point) / 2;
               var path = new Path.Line(point, next);
               path.scale(0.66);
-  
+
               //var circle = new Path.Circle(point, 1);
               //circle.fillColor = new Color("white");
               paths.addChild(path);
               //paths.addChild(circle);
           }
           //removeSmallBits(path);
-  
+
           return paths;
       }
-  
+
       function onResize() {
           var margin = 0;
           bbox = {
@@ -278,6 +277,8 @@ let page (cv : Resume.t') content =
                    [txt {%eml|<%- cv.firstname %> <%- cv.lastname %>|}] ] ]
        ; div ~a:[a_id "body"] content
        ; script ~a:[a_src "/highlight.js"] (txt "") ] )
+
+let txt = Unsafe.data
 
 let resume (cv : Resume.t') =
   let icon_of_string s =
@@ -372,36 +373,31 @@ let resume (cv : Resume.t') =
             ([h2 [txt "Technical skills"]] @ List.map sidebar_skill cv.skills)
         ]
     ; breadcrumbs
-    ; div
-        ~a:[a_id "content-wrapper"]
-        [ article
-            ~a:[a_id "content"]
-            [ section ([h2 [txt "Formation"]] @ List.map formation cv.formations)
-            ; section
-                ([h2 [txt "Experience"]] @ List.map experience cv.experiences)
-            ; section ([h2 [txt "Technical skills"]] @ List.map skill cv.skills)
-            ] ] ]
+    ; article
+        ~a:[a_id "content"]
+        [ section ([h2 [txt "Formation"]] @ List.map formation cv.formations)
+        ; section ([h2 [txt "Experience"]] @ List.map experience cv.experiences)
+        ; section ([h2 [txt "Technical skills"]] @ List.map skill cv.skills) ]
+    ]
 
 let index cv =
   let breadcrumbs = breadcrumbs @@ Breadcrumbs.of_string_list [] in
   page cv
     [ sidebar [navmenu "Index"; contact cv]
     ; breadcrumbs
-    ; div
-        ~a:[a_id "content-wrapper"]
-        [ article
-            ~a:[a_id "content"]
-            [ section
-                [ p [txt "Welcome to my home page"]
-                ; p
-                    [ txt
-                        {|I used to be a student in computer science at ENS Paris-Saclay, nowadays I am a dev at Tarides,
+    ; article
+        ~a:[a_id "content"]
+        [ section
+            [ p [txt "Welcome to my home page"]
+            ; p
+                [ txt
+                    {|I used to be a student in computer science at ENS Paris-Saclay, nowadays I am a dev at Tarides,
 were I work on tools for ocaml like odoc and ocamlformat.
-    
+
 I am very interested in the OCaml language and programming languages in general.
 You can check some of my projects out on my <a href="https://github.com/EmileTrotignon">github</a>,
 and my resume on this website.|}
-                    ] ] ] ] ]
+                ] ] ] ]
 
 let software cv =
   let breadcrumbs = breadcrumbs @@ Breadcrumbs.of_string_list [] in
@@ -415,34 +411,30 @@ let software cv =
   page cv
     [ sidebar [navmenu "Software"; contact cv]
     ; breadcrumbs
-    ; div
-        ~a:[a_id "content-wrapper"]
-        [ article
-            ~a:[a_id "content"]
-            [ section
-                [ p [txt "I am responsible for the following project :"]
-                ; ul
-                    [ li
-                        [ a
-                            ~a:
-                              [ a_href
-                                  "https://github.com/EmileTrotignon/embedded_ocaml_templates"
-                              ]
-                            [txt "ocaml_embedded_templates"] ] ]
-                ; p [txt "I have also contributed to the following projects :"]
-                ; ul
-                    (List.map
-                       (fun (url, name) -> li [a ~a:[a_href url] [txt name]])
-                       contributions ) ] ] ] ]
+    ; article
+        ~a:[a_id "content"]
+        [ section
+            [ p [txt "I am responsible for the following project :"]
+            ; ul
+                [ li
+                    [ a
+                        ~a:
+                          [ a_href
+                              "https://github.com/EmileTrotignon/embedded_ocaml_templates"
+                          ]
+                        [txt "ocaml_embedded_templates"] ] ]
+            ; p [txt "I have also contributed to the following projects :"]
+            ; ul
+                (List.map
+                   (fun (url, name) -> li [a ~a:[a_href url] [txt name]])
+                   contributions ) ] ] ]
 
 let page_404 cv =
   page cv
     [ sidebar [navmenu "Error 404"; contact cv]
-    ; div
-        ~a:[a_id "content-wrapper"]
-        [ article
-            ~a:[a_id "content"]
-            [section [h1 [txt "Error 404 : page was not found."]]] ] ]
+    ; article
+        ~a:[a_id "content"]
+        [section [h1 [txt "Error 404 : page was not found."]]] ]
 
 let to_string ty = Format.asprintf "%a" (Tyxml_html.pp ()) ty
 
@@ -465,6 +457,4 @@ let blog cv blog bc =
   page cv
     [ sidebar [navmenu "Blog"; contact cv]
     ; breadcrumbs bc
-    ; div
-        ~a:[a_id "content-wrapper"]
-        [article ~a:[a_id "content"] [Unsafe.data blog]] ]
+    ; article ~a:[a_id "content"] [Unsafe.data blog] ]
