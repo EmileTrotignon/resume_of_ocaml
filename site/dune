@@ -26,3 +26,8 @@
  (aliases site script)
  (action
   (copy ../src/jsoo/highlight.bc.js ./highlight.js)))
+
+(rule
+ (aliases site script)
+ (action
+  (copy ../src/jsoo/voronoi.bc.js ./voronoi.js)))

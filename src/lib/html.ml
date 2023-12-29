@@ -63,211 +63,17 @@ let page (cv : Resume.t') content =
            ~href:
              "https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap"
            ()
-       ; script ~a:[a_src "/js/rhill-voronoi-core.js"] (txt "")
        ; script
            ~a:
              [ a_src "https://kit.fontawesome.com/0c027fe19b.js"
              ; a_crossorigin `Anonymous ]
-           (txt "")
-       ; script
-           ~a:
-             [ a_src
-                 "https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.11/paper-full.min.js"
-             ]
-           (txt "")
-       ; script
-           ~a:
-             [ Unsafe.string_attrib "type" "text/paperscript"
-             ; Unsafe.string_attrib "canvas" "canvas-1" ]
-           (Unsafe.data
-              {|
-      var voronoi =  new Voronoi();
-      var sites = generateBeeHivePoints(view.size / 75, true);
-      var speeds = generateSpeeds(view.size / 75);
-      console.log(speeds);
-      var forces = generateSpeeds(view.size / 75);
-      var bbox, diagram;
-      var oldSize = view.size;
-      var spotColor = new Color('rgba(240, 84, 76, 0.66)');
-      var mousePos = view.center;
-      var selected = false;
-
-      onResize();
-
-      function onMouseDown(event) {
-          sites.push(event.point);
-          renderDiagram();
-      }
-
-      function onMouseMove(event) {
-          mousePos = event.point;
-          mousePos.speed = new Point(0.0);
-          mousePos.force = new Point(0.0);
-          if (event.count == 0)
-          {
-              sites.push(mousePos);
-              speeds.push(new Point(0,0));
-              forces.push(new Point(0,0));
-          }
-
-          sites[sites.length - 1] = mousePos;
-          speeds[speeds.length - 1] = new Point(0,0);
-          forces[forces.length - 1] = new Point(0,0);
-      }
-
-      function moveSites() {
-        for (var i = 0; i < sites.length; i++) {
-          if ((sites[i] + speeds[i]).isInside(new Rectangle(new Point(bbox.xl, bbox.yt), new Point(bbox.xr, bbox.yb))))
-            sites[i] += speeds[i];
-          else
-            speeds[i] *= -1;
-          //sites[i] = moveToRect(sites[i], new Rectangle(new Point(bbox.xl, bbox.yt), new Point(bbox.xr, bbox.yb)));
-          var length = Math.sqrt(speeds[i].x * speeds[i].x + speeds[i].y * speeds[i].y);
-          speeds[i] += forces[i];
-          var new_length = Math.sqrt(speeds[i].x * speeds[i].x + speeds[i].y * speeds[i].y);
-          speeds[i].x = speeds[i].x * length / new_length;
-          speeds[i].y = speeds[i].y * length / new_length;
-          forces[i] = (Point.random() - new Point(0.5, 0.5)) / 100;
-        }
-      }
-
-      function moveToRect(point, rect) {
-        point2 = new Point(point);
-        while(!point2.isInside(rect)) {
-          if (point2.x < rect.left)
-            point2.x += rect.width;
-          if (point2.x > rect.right)
-            point2.x -= rect.width;
-          if (point2.y < rect.top)
-            point2.y += rect.height;
-          if (point2.y > rect.bottom)
-            point2.y -= rect.height;
-        }
-        return point2;
-      }
-
-      function renderDiagram() {
-          project.activeLayer.children = [];
-          moveSites();
-          var diagram = voronoi.compute(sites, bbox);
-          if (diagram) {
-              for (var i = 0, l = sites.length; i < l; i++) {
-                  var cell = diagram.cells[sites[i].voronoiId];
-                  if (cell) {
-                      var halfedges = cell.halfedges,
-                          length = halfedges.length;
-                      if (length > 2) {
-                          var points = [];
-                          for (var j = 0; j < length; j++) {
-                              v = halfedges[j].getEndpoint();
-                              points.push(new Point(v));
-                          }
-                          createPath(points, sites[i]);
-                      }
-                  }
-              }
-          }
-      }
-
-      function removeSmallBits(path) {
-          var averageLength = path.length / path.segments.length;
-          var min = path.length / 50;
-          for(var i = path.segments.length - 1; i >= 0; i--) {
-              var segment = path.segments[i];
-              var cur = segment.point;
-              var nextSegment = segment.next;
-              var next = nextSegment.point + nextSegment.handleIn;
-              if (cur.getDistance(next) < min) {
-                  segment.remove();
-              }
-          }
-      }
-
-      function generateBeeHivePoints(size, loose) {
-          var points = [];
-          var col = view.size / size;
-          for(var i = -1; i < size.width + 1; i++) {
-              for(var j = -1; j < size.height + 1; j++) {
-                  var point = new Point(i, j) / new Point(size) * view.size + col / 2;
-                  if(j % 2)
-                      point += new Point(col.width / 2, 0);
-                  if(loose)
-                      point += (col) * Point.random() - col / 4;
-                  points.push(point);
-              }
-          }
-          return points;
-      }
-
-      function generateSpeeds(size)
-      {
-        var points = [];
-          for(var i = -1; i < size.width + 1; i++) {
-              for(var j = -1; j < size.height + 1; j++) {
-                  var speed = new Point(Math.random()/8, Math.random()/4);
-                  points.push(speed);
-              }
-          }
-          return points;
-      }
-
-      function createPath(points, center) {
-          var paths = new CompoundPath();
-          if (!selected) {
-              paths.strokeColor = spotColor;
-          } else {
-              paths.fullySelected = selected;
-          }
-          //paths.closed = true;
-
-          for (var i = 0, l = points.length; i < l; i++) {
-              var point = points[i];
-              var next = points[(i + 1) == points.length ? 0 : i + 1];
-              var prec = points[(i - 1) == 0 ? points.length -1 : i - 1];
-              var vector = (next - point) / 2;
-              var path = new Path.Line(point, next);
-              path.scale(0.66);
-
-              //var circle = new Path.Circle(point, 1);
-              //circle.fillColor = new Color("white");
-              paths.addChild(path);
-              //paths.addChild(circle);
-          }
-          //removeSmallBits(path);
-
-          return paths;
-      }
-
-      function onResize() {
-          var margin = 0;
-          bbox = {
-              xl: margin,
-              xr: view.bounds.width - margin,
-              yt: margin,
-              yb: view.bounds.height - margin
-          };
-          for (var i = 0, l = sites.length; i < l; i++) {
-              sites[i] = sites[i] * view.size / oldSize;
-          }
-          oldSize = view.size;
-      }
-      function onFrame(event) {
-          renderDiagram();
-      }
-      /*function onKeyDown(event) {
-          if (event.key == 'space') {
-              selected = !selected;
-              renderDiagram();
-          }
-      }*/
-      |} )
-       ] )
+           (txt "") ] )
     (body
        [ header
            [ canvas
                ~a:
                  [ Unsafe.string_attrib "resize" "true"
-                 ; a_id "canvas-1"
+                 ; a_id "voronoi"
                  ; a_style "user-select: none;"
                  ; Unsafe.string_attrib "data-paper-scope" "1" ]
                []
@@ -276,7 +82,8 @@ let page (cv : Resume.t') content =
                    ~a:[a_href "/"]
                    [txt {%eml|<%- cv.firstname %> <%- cv.lastname %>|}] ] ]
        ; div ~a:[a_id "body"] content
-       ; script ~a:[a_src "/highlight.js"] (txt "") ] )
+       ; script ~a:[a_src "/highlight.js"] (txt "")
+       ; script ~a:[a_src "/voronoi.js"] (txt "") ] )
 
 let txt = Unsafe.data
 
@@ -344,7 +151,7 @@ let resume (cv : Resume.t') =
           ~a:[a_class ["subtitle"]]
           ( (if f.location <> "" then [txt (f.location ^ ", ")] else [])
           @ [txt (f.date_start ^ " - " ^ f.date_end)] )
-      ; p [txt (f.diploma ^ if f.result <> "" then " - " ^ f.result else "" )]
+      ; p [txt (f.diploma ^ (if f.result <> "" then " - " else "") ^ f.result)]
       ; p [txt f.description] ]
   in
   let experience (e : Experience.t') =
@@ -353,7 +160,7 @@ let resume (cv : Resume.t') =
       [ h3 [txt e.title]
       ; div
           ~a:[a_class ["subtitle"]]
-          [txt (e.location ^ if e.location <> "" then ", " else "" ^ e.date)]
+          [txt (e.location ^ (if e.location <> "" then ", " else "") ^ e.date)]
       ; p [txt e.description] ]
   in
   let skill (s : Skill.t') =
