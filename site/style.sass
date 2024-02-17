@@ -101,13 +101,17 @@ body
     background-attachment: fixed
     font-family: $font_body
     font-size: 14px
+    @media (max-width: $layout-breakpoint-small)
+    --bg-sep: calc(30vh - sin(var(--bg-angle)) * 100vw / 2)
+
+
+
 
 \:root
     --margin-top-body: 1rem
 
 #body
     position: relative
-    width: fit-content
     margin: auto
     display: grid
     grid-template-rows: calc(16px+0.5rem) 1fr
