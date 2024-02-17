@@ -54,6 +54,10 @@ let page (cv : Resume.t') content =
        (title
           (txt {%eml|<%- cv.firstname %> <%- cv.lastname %>'s personal page|}) )
        [ meta ~a:[a_charset "utf-8"] ()
+       ; meta
+           ~a:
+             [a_name "viewport"; a_content "width=device-width, initial-scale=1"]
+           ()
        ; link ~rel:[`Stylesheet] ~href:"/style.css" ()
        ; link ~rel:[`Stylesheet]
            ~href:
@@ -207,7 +211,12 @@ and my resume on this website.|}
                 ] ] ] ]
 
 let software cv =
-  let breadcrumbs = breadcrumbs @@ Breadcrumbs.of_string_list [] in
+  let breadcrumbs = breadcrumbs @@ Breadcrumbs.of_string_list ["software"] in
+  let creations =
+    [ ( "https://github.com/EmileTrotignon/embedded_ocaml_templates"
+      , "ocaml_embedded_templates" )
+    ; ("https://github.com/EmileTrotignon/highlexer", "highlexer") ]
+  in
   let contributions =
     [ ("https://github.com/ocaml-ppx/ocamlformat", "ocamlformat")
     ; ("https://github.com/ocaml/odoc", "odoc")
@@ -221,16 +230,12 @@ let software cv =
     ; article
         ~a:[a_id "content"]
         [ section
-            [ p [txt "I am responsible for the following project :"]
+            [ p [txt "I am responsible for the following projects:"]
             ; ul
-                [ li
-                    [ a
-                        ~a:
-                          [ a_href
-                              "https://github.com/EmileTrotignon/embedded_ocaml_templates"
-                          ]
-                        [txt "ocaml_embedded_templates"] ] ]
-            ; p [txt "I have also contributed to the following projects :"]
+                (List.map
+                   (fun (url, name) -> li [a ~a:[a_href url] [txt name]])
+                   creations )
+            ; p [txt "I have also contributed to the following projects:"]
             ; ul
                 (List.map
                    (fun (url, name) -> li [a ~a:[a_href url] [txt name]])
