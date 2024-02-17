@@ -81,6 +81,16 @@ module Circle = struct
 
   let compare (c, r) (c', r') =
     match P2.compare c c' with 0 -> Float.compare r r' | c -> c
+
+  let path (center, r) =
+    let open Brr_canvas.C2d.Path in
+    let path = create () in
+    arc path
+      ~cx:P2.(x center)
+      ~cy:P2.(y center)
+      ~r ~start:0.
+      ~stop:Float.(2. * pi) ;
+    path
 end
 
 module Triangle = struct
@@ -147,7 +157,22 @@ module Triangle = struct
     = 2
 end
 
-module Edge_set = Set.Make (Edge)
+module Edge_set = struct
+  include Set.Make (Edge)
+
+  let path edges =
+    let open Brr_canvas in
+    let path = C2d.Path.create () in
+    iter
+      (fun (s, e) ->
+        let open P2 in
+        let open C2d.Path in
+        move_to path ~x:(x s) ~y:(y s) ;
+        line_to path ~x:(x e) ~y:(y e) )
+      edges ;
+    path
+end
+
 module Triangle_set = Set.Make (Triangle)
 module Triangle_map = Map.Make (Triangle)
 module Circle_set = Set.Make (Circle)
@@ -211,23 +236,6 @@ let ( .%{} ) obj prop = Jv.get obj prop
 let ( @% ) f arg = Jv.apply f [|arg|]
 
 let ( !% ) = Jstr.of_string
-
-let path_of_circle (center, r) =
-  let open C2d.Path in
-  let path = create () in
-  arc path ~cx:P2.(x center) ~cy:P2.(y center) ~r ~start:0. ~stop:Float.(2. * pi) ;
-  path
-
-let path_of_edges edges =
-  let path = C2d.Path.create () in
-  Edge_set.iter
-    (fun (s, e) ->
-      let open P2 in
-      let open C2d.Path in
-      move_to path ~x:(x s) ~y:(y s) ;
-      line_to path ~x:(x e) ~y:(y e) )
-    edges ;
-  path
 
 let canvas_color canvas =
   (Jv.global.%{"getComputedStyle"} @% Canvas.to_jv canvas).%{"getPropertyValue"}
@@ -299,8 +307,8 @@ let display_particules canvas ~time particules =
     |> Array.map (fun particule -> particule.pos)
     |> Delaunay_p2.triangulate
   in
-  let delaunay = [triangulation |> delaunay |> path_of_edges] in
-  let voronoi = [triangulation |> voronoi |> path_of_edges] in
+  let delaunay = [triangulation |> delaunay |> Edge_set.path] in
+  let voronoi = [triangulation |> voronoi |> Edge_set.path] in
   let max_radius =
     let canvas_h = canvas |> Canvas.h |> float_of_int in
     let canvas_w = canvas |> Canvas.w |> float_of_int in
@@ -309,7 +317,7 @@ let display_particules canvas ~time particules =
   let circles =
     triangulation |> circles
     |> Circle_set.filter (fun (_, r) -> r < max_radius)
-    |> Circle_set.elements |> List.map path_of_circle
+    |> Circle_set.elements |> List.map Circle.path
   in
   display_image canvas ~time ~voronoi ~circles ~delaunay
 
@@ -343,7 +351,10 @@ let rec step ({particules; mouse_pos; previous_time} as state) canvas time =
             let speed = V2.(-1. * speed) in
             let delta_pos = V2.(-2. * delta_pos) in
             let pos = V2.(pos + delta_pos) in
-            {pos; speed}
+            if Box2.mem pos bounds then {pos; speed}
+            else
+              let pos = P2.random_b bounds in
+              {pos; speed}
         in
         {pos; speed} )
     particules ;
