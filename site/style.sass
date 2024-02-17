@@ -82,8 +82,8 @@ $alpha-white: rgba(256, 256, 256, 0.66)
 $font_headers: 'Playfair Display', serif
 $font_body: 'Fira Code', sans-serif
 
-// 960 is half a 1920*1080 screen's width. We give 20pixels of margin.
-$layout-breakpoint-small: 940px
+// 960 is half a 1920*1080 screen's width. We give 10pixels of margin.
+$layout-breakpoint-small: 950px
 
 *,*::before,*::after,:root
     box-sizing: border-box
@@ -114,7 +114,6 @@ body
     position: relative
     margin: auto
     display: grid
-    grid-template-rows: calc(16px+0.5rem) 1fr
     max-width: calc(min(18rem + 48rem, 100%))
     grid-template-columns: 18rem 1fr
     column-gap: 1rem
@@ -123,7 +122,6 @@ body
     padding-left: 1rem
     padding-right: 1rem
     @media (max-width: $layout-breakpoint-small)
-        grid-template-rows: min-content calc(16px+0.5rem) 1fr
         grid-template-columns: 1fr
         padding-left: 1rem
         padding-right: 1rem
@@ -272,6 +270,7 @@ nav#sidebar
 #content
     //z-index: -1
     width: 100%
+    overflow: auto
     height: fit-content
     grid-column: 2 / span 1
     grid-row: 2 / span 1
@@ -348,6 +347,8 @@ pre
     background-color: var(--bg1)
     border-radius: 0.2rem
     border: thin solid var(--fg4)
+    width: 100%
+    overflow: auto
 
 img
     max-width: 80%
