@@ -136,7 +136,7 @@ let resume (cv : Resume.t') =
         | VeryStrong ->
             span ~a:[a_class ["strength-4"]] [] ) ]
   in
-  let sidebar_skill (s : Skill.t') =
+  let _sidebar_skill (s : Skill.t') =
     p
       [ a
           ~a:[a_href {%eml|#<%- s.name %>|}; a_class ["strength-item"]]
@@ -180,8 +180,8 @@ let resume (cv : Resume.t') =
         [ navmenu "Resume"
         ; contact cv
         ; section ([h2 [txt "Languages"]] @ List.map language cv.languages)
-        ; section
-            ([h2 [txt "Technical skills"]] @ List.map sidebar_skill cv.skills)
+          (*section
+            ([h2 [txt "Technical skills"]] @ List.map sidebar_skill cv.skills)*)
         ]
     ; breadcrumbs
     ; article
@@ -210,19 +210,41 @@ You can check some of my projects out on my <a href="https://github.com/EmileTro
 and my resume on this website.|}
                 ] ] ] ]
 
+type software = {url: string; name: string; description: string}
+
 let software cv =
+  let one_software {url; name; description} =
+    li [a ~a:[a_href url] [txt name]; txt ", "; txt description]
+  in
   let breadcrumbs = breadcrumbs @@ Breadcrumbs.of_string_list ["software"] in
   let creations =
-    [ ( "https://github.com/EmileTrotignon/embedded_ocaml_templates"
-      , "ocaml_embedded_templates" )
-    ; ("https://github.com/EmileTrotignon/highlexer", "highlexer") ]
+    [ { url= "https://github.com/EmileTrotignon/embedded_ocaml_templates"
+      ; name= "ocaml_embedded_templates"
+      ; description= "a template engine that uses OCaml as its logic." }
+    ; { url= "https://github.com/EmileTrotignon/highlexer"
+      ; name= "highlexer"
+      ; description= "an accurate code highlighter for OCaml." } ]
   in
   let contributions =
-    [ ("https://github.com/ocaml-ppx/ocamlformat", "ocamlformat")
-    ; ("https://github.com/ocaml/odoc", "odoc")
-    ; ("https://github.com/art-w/sherlodoc", "sherlodoc")
-    ; ("https://github.com/ocaml/dune", "dune")
-    ; ("https://gallium.inria.fr/~fpottier/menhir/", "menhir") ]
+    [ { url= "https://github.com/ocaml-ppx/ocamlformat"
+      ; name= "ocamlformat"
+      ; description= "the OCaml code formatter." }
+    ; { url= "https://github.com/ocaml/odoc"
+      ; name= "odoc"
+      ; description= "the modern OCaml documentation generator." }
+    ; { url= "https://github.com/art-w/sherlodoc"
+      ; name= "sherlodoc"
+      ; description= "a search engine for OCaml documentation." }
+    ; { url= "https://github.com/art-w/gamelle"
+      ; name= "gamelle"
+      ; description=
+          "An OCaml 2D game library with browser and native backends." }
+    ; { url= "https://github.com/ocaml/dune"
+      ; name= "dune"
+      ; description= "the OCaml build system." }
+    ; { url= "https://gallium.inria.fr/~fpottier/menhir/"
+      ; name= "menhir"
+      ; description= "the OCaml LR1 parser generator." } ]
   in
   page cv
     [ sidebar [navmenu "Software"; contact cv]
@@ -231,15 +253,9 @@ let software cv =
         ~a:[a_id "content"]
         [ section
             [ p [txt "I am responsible for the following projects:"]
-            ; ul
-                (List.map
-                   (fun (url, name) -> li [a ~a:[a_href url] [txt name]])
-                   creations )
+            ; ul (List.map one_software creations)
             ; p [txt "I have also contributed to the following projects:"]
-            ; ul
-                (List.map
-                   (fun (url, name) -> li [a ~a:[a_href url] [txt name]])
-                   contributions ) ] ] ]
+            ; ul (List.map one_software contributions) ] ] ]
 
 let page_404 cv =
   page cv

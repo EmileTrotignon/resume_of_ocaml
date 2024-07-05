@@ -45,7 +45,6 @@ module P2_ = struct
     let p4 = (x p4, y p4) in
     Delaunay.FloatPoints.in_circle p1 p2 p3 p4
 
-  let random' () = v (Random.float 1.) (Random.float 1.)
 
   let random_b box =
     v
@@ -365,17 +364,15 @@ let random_speed () =
   V2.(5. * P2.random_b (Box2.v (V2.v (-1.) (-1.)) (V2.v 2. 2.)))
 
 let follow_mouse state ev =
-  let mouse = Ev.as_type ev in
+  let pointer = Ev.as_type ev in
+  let mouse = Ev.Pointer.as_mouse pointer in
   let x = Ev.Mouse.offset_x mouse in
   let y = Ev.Mouse.offset_y mouse in
   state.mouse_pos <- P2.v x y
 
 let new_particules canvas =
   Canvas.set_size_to_layout_size canvas ;
-  let canvas_h = canvas |> Canvas.h |> float_of_int in
-  let canvas_w = canvas |> Canvas.w |> float_of_int in
   let n_points = Box2.area (bounds canvas) /. 5000. |> int_of_float in
-  printf "Canvas dims = w%f h%f n_points =%i" canvas_w canvas_h n_points ;
   Array.init n_points (fun _i ->
       let pos = P2.random_b (bounds canvas) in
       let speed = random_speed () in
@@ -404,7 +401,8 @@ let () =
     {particules; mouse_pos= P2.v 0. 0.; previous_time= Float.infinity}
   in
   let canvas_target = canvas |> Canvas.to_jv |> Ev.target_of_jv in
-  let _ = Ev.(listen mousemove (follow_mouse state) canvas_target) in
-  let _ = Ev.(listen resize (canvas_resize state canvas)) canvas_target in
-  let _ = Ev.(listen mouseup (on_click state)) canvas_target in
+  let window_target = Window.as_target G.window in
+  let _ = Ev.(listen pointermove (follow_mouse state) canvas_target) in
+  let _ = Ev.(listen resize (canvas_resize state canvas)) window_target in
+  let _ = Ev.(listen pointerup (on_click state)) canvas_target in
   ignore (G.request_animation_frame (step state canvas))

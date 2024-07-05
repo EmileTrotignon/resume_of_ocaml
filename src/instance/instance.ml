@@ -7,13 +7,10 @@ let emile =
     ~intro:
       (v
          ~french:
-           "Étudiant en informatique à l'ENS Paris-Saclay, je suis très \
-            interessé par OCaml et plus généralement par les langues de \
-            programmation et la compilation."
+           "Informaticien, contributeur de la platforme OCaml : sherlodoc, \
+            odoc, ocamlformat."
          ~english:
-           "As a master's student in Computer Science at ENS Paris-Saclay, I \
-            am very interested in OCaml, programming languages and \
-            compilation." )
+           "OCaml platform dev, contributor to sherlodoc, odoc and ocamlformat." )
     ~formations:
       [ formation (I "École Normale Supérieure Paris-Saclay")
           (v ~french:"Master Parisien de Recherche en Informatique"
@@ -40,6 +37,29 @@ let emile =
           ~result:(v ~french:"Mention Très Bien" ~english:"with honours") ]
     ~experiences:
       [ experience
+          (v ~french:"Développeur" ~english:"Developer")
+          ~description:
+            (v
+               ~french:
+                 (md
+                    "Développement de logiciel open-source : contribution aux \
+                     outils de la plateforme OCaml : odoc, ocamlformat, dune. \
+                     Ajout d'une barre de recherche dans odoc, contributions \
+                     du CSS de la barre jusqu'aux algos de la recherche. \
+                     Coordination et integrations de la fonctionnalité avec le \
+                     systeme de build dune.\n\
+                     Autres contribution dans ocamlformat, odoc et dune." )
+               ~english:
+                 (md
+                    "Open-source software developement: contribution to the \
+                     tools of the OCaml platform: odoc, ocamlformat, dune.\n\
+                     Search bar in odoc: contributions from the CSS to the \
+                     search algorithms. Coordination and integration of the \
+                     feature with the dune build system." ) )
+          (I "Tarides") ~location:(I "Paris, France")
+          (v ~french:"Septembre 2022 - présent"
+             ~english:"September 2022 - present" )
+      ; experience
           (v ~french:"Stage de recherche en informatique"
              ~english:"Research internship in computer science" )
           ~description:
@@ -53,7 +73,7 @@ let emile =
                  (md
                     "4.5-month intership tutored by Vincent Laviron and Pierre \
                      Chambart. Generalisation of recursive tail-call \
-                     optimisation modulo constructor" ) )
+                     optimisation modulo constructor." ) )
           (v ~french:"OCamlpro, équipe Flambda"
              ~english:"OCamlpro, team Flambda" )
           ~location:(I "Paris, France")
@@ -201,7 +221,36 @@ let emile =
       [ Language.make (v ~french:"Anglais" ~english:"English") Strong
       ; Language.make (v ~french:"Français" ~english:"French") VeryStrong ]
     ~skills:
-      [ skill (I "Compilation") Strong
+      [ skill
+          (v ~english:"Functionnal programming"
+             ~french:"Programmation fonctionnelle" )
+          VeryStrong
+          ~description:
+            (v
+               ~french:
+                 (md
+                    "J'aime beaucoup les langages de programmation \
+                     fonctionnels, ainsi que les systèmes de type avancés. Je \
+                     programme en Ocaml depuis le début de mes études, et \
+                     j'apprécie beaucoup ce langage. J'ai un peu d'expérience \
+                     en Scala ainsi qu'en Rust, et j'ai beaucoup expérimenté \
+                     avec les fonctionnalités avancées de C++.\n\
+                     J'ai aussi publié deux paquets sur Opam, le gestionnaire \
+                     de paquets d'Ocaml, ainsi que contribué à plusieurs \
+                     d'entre eux : \
+                     [software](https://emiletrotignon.github.io/software).\n" )
+               ~english:
+                 (md
+                    " I really enjoy functionnal programming languages, as \
+                     well as advanced type systems. I have been programming in \
+                     OCaml since my first year of university, and I am very \
+                     passionate about this language. I have some experience \
+                     with Scala and Rust, and I had a lot of fun exploring \
+                     advanced C++ features.\n\n\
+                     I also published two packages on Opam, the Ocaml package \
+                     manager, and contributed to many: \
+                     [software](https://emiletrotignon.github.io/software)." ) )
+      ; skill (I "Compilation") Strong
           ~description:
             (v
                ~french:
@@ -255,38 +304,6 @@ let emile =
                      calculability, logic.\n\
                      This enhances my understanding of computer science in \
                      general, in addition to the particular skills acquired." ) )
-      ; skill
-          (v ~english:"Functionnal programming"
-             ~french:"Programmation fonctionnelle" )
-          VeryStrong
-          ~description:
-            (v
-               ~french:
-                 (md
-                    "J'aime beaucoup les langages de programmation \
-                     fonctionnels, ainsi que les systèmes de type avancés. Je \
-                     programme en Ocaml depuis le début de mes études, et \
-                     j'apprécie beaucoup ce langage. J'ai un peu d'expérience \
-                     en Scala ainsi qu'en Rust, et j'ai beaucoup expérimenté \
-                     avec les fonctionnalités avancées de C++.\n\
-                     J'ai aussi publié un paquet sur Opam, le gestionnaire de \
-                     paquets d'Ocaml : \
-                     [github/embedded_ocaml_templates](https://github.com/EmileTrotignon/embedded_ocaml_templates).\n\
-                     Il contient un réecriveur PPX, ainsi qu'un petit parser \
-                     écrit avec Ocamllex." )
-               ~english:
-                 (md
-                    " I really enjoy functionnal programming languages, as \
-                     well as advanced type systems. I have been programming in \
-                     OCaml since my first year of university, and I am very \
-                     passionate about this language. I have some experience \
-                     with Scala and Rust, and I had a lot of fun exploring \
-                     advanced C++ features.\n\
-                     I also published a package on Opam, the Ocaml package \
-                     manager : \
-                     [github/embedded_ocaml_templates](https://github.com/EmileTrotignon/embedded_ocaml_templates).\n\
-                     It includes a PPX rewriter, and a small parser written \
-                     with Menhir." ) )
       ; skill (I "Proof assistants and verification") Basic
           ~description:
             (v
@@ -310,13 +327,18 @@ let emile =
                     "Expérience avec quelques frameworks d'interfaces \
                      graphiques :\n\
                      Qt et Dear ImGUI pour C++, WinForm pour C#, Swing pour \
-                     Scala, Tkinter pour Python" )
+                     Scala, Tkinter pour Python. J'ai aussi écris le système \
+                     d'interface graphique dans \
+                     [gamelle](https://github.com/art-w/gamelle/)" )
                ~english:
                  (md
                     "I have experience with a few frameworks for programming \
                      GUIs :\n\
                      Qt and Dear ImGUI with C++, WinForm with C#, Swing with \
-                     Scala, Tkinter with Python." ) )
+                     Scala, Tkinter with Python.\n\
+                     I also co-authored the UI module in \
+                     [gamelle](https://github.com/art-w/gamelle/), a game \
+                     library for OCaml." ) )
       ; skill
           (v ~french:"Développement web" ~english:"Web development")
           Intermediate
@@ -327,13 +349,15 @@ let emile =
                     "Front-end : Bonne connaissance de HTML/CSS. J'ai exercé \
                      cette compétence professionnellement lors de l'été 2018.\n\n\
                      Back-end : Expérience professionnelle de développement \
-                     d'une application Node.js ." )
+                     d'une application Node.js. Contributions au webdesign des \
+                     pages générées par odoc." )
                ~english:
                  (md
                     "Front-end : Good knowledge of HTML and CSS. One month \
                      experience during the summer of 2018.\n\n\
                      Back-end : Professional experience developing a Node.js \
-                     web app." ) )
+                     web app. Contributions to the design of odoc \
+                     documentation pages." ) )
       ; skill
           (v ~french:"Divers" ~english:"Miscellaneous")
           Strong
