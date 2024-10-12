@@ -351,13 +351,20 @@ pre
     overflow: auto
 
 img
-    max-width: 80%
+    max-width: 100%
     margin: auto
     display: block
     color: var(--aqua)
     text-align: center
     @media (max-width: $layout-breakpoint-small)
         max-width: 100%
+.img+.caption
+    display: block
+    font-size: 0.9em
+    width: 100%
+    text-align: center
+    margin-top: 0.2em
+    font-style: italic
 
 \:root
     --source-code-comment: var(--gray)

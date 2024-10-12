@@ -31,6 +31,7 @@ let html_of_markdown ~path (md : string) =
   html_into_page ~path
     ( md |> Cmarkit.Doc.of_string
     |> Md_helpers.(map_link suffix_md_to_html)
+    |> Md_helpers.(image_legend)
     |> Cmarkit_html.of_doc ~safe:false )
 
 let auto_index ~path file (sub_files : Fpath.t list) =

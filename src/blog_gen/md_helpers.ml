@@ -29,3 +29,35 @@ let map_link link_f md =
   in
   let mapper = Mapper.make ~inline () in
   Mapper.map_doc mapper md
+
+let html str = Inline.Raw_html (Block_line.tight_list_of_string str, Meta.none)
+
+let image_legend md =
+  let inline _m = function
+    | Inline.Image (link, _meta) as image ->
+        let text = Inline.Link.text link in
+        let add_link =
+          match Inline.Link.reference link with
+          | `Ref _ ->
+              Fun.id
+          | `Inline (link_def, _meta') -> (
+            match Link_definition.dest link_def with
+            | None ->
+                Fun.id
+            | Some (link_uri, _meta_uri) ->
+                fun (text : Inline.t) ->
+                  Inline.Inlines
+                    ( [ html (Printf.sprintf {|<a class='img' href='%s'>|} link_uri)
+                      ; text
+                      ; html "</a>" ]
+                    , Meta.none ) )
+        in
+        let caption =
+          [html {|<span class='caption'>|}; text; html {|</span>|}]
+        in
+        Mapper.ret (Inline.Inlines (add_link image :: caption, Meta.none))
+    | _ ->
+        `Default
+  in
+  let mapper = Mapper.make ~inline () in
+  Mapper.map_doc mapper md
