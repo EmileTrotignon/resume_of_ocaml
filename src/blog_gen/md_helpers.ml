@@ -44,10 +44,22 @@ let image_legend md =
             match Link_definition.dest link_def with
             | None ->
                 Fun.id
+            | Some (link_uri, _meta_uri)
+              when String.ends_with ~suffix:".mp4" link_uri
+                   || String.ends_with ~suffix:".webm" link_uri ->
+                fun _text ->
+                  let video_type =
+                    link_uri |> String.split_on_char '.' |> List.rev |> List.hd
+                  in
+                  html
+                    (Printf.sprintf
+                       {|<video controls class="img"><source src="%s" type="video/%s" /></video>|}
+                       link_uri video_type )
             | Some (link_uri, _meta_uri) ->
                 fun (text : Inline.t) ->
                   Inline.Inlines
-                    ( [ html (Printf.sprintf {|<a class='img' href='%s'>|} link_uri)
+                    ( [ html
+                          (Printf.sprintf {|<a class='img' href='%s'>|} link_uri)
                       ; text
                       ; html "</a>" ]
                     , Meta.none ) )

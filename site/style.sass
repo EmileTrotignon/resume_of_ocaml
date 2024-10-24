@@ -114,7 +114,7 @@ body
     position: relative
     margin: auto
     display: grid
-    max-width: calc(min(18rem + 48rem, 100%))
+    max-width: calc(min(18rem + 60rem, 100%))
     grid-template-columns: 18rem 1fr
     column-gap: 1rem
     margin-top: var(--margin-top-body)
@@ -350,7 +350,7 @@ pre
     width: 100%
     overflow: auto
 
-img
+img,video
     max-width: 100%
     margin: auto
     display: block
@@ -426,12 +426,12 @@ img
 
 /* Prefix operators */
 .ASSERT, .BANG, .PREFIXOP,
-/* Infix operators.
- A choice had to be made for equal `=` which is both a keyword and an operator.
- It looked better having it as an operator, because when it is a keyword,
- there are already loads of keyword around.
- It would look even nicer if there was a way to distinguish between these
- two cases.*/
+// Infix operators
+// A choice had to be made for equal `=` which is both a keyword and an operator.
+// It looked better having it as an operator, because when it is a keyword,
+// there are already loads of keyword around.
+// It would look even nicer if there was a way to distinguish between these
+// two cases.
 .INFIXOP0, .INFIXOP1, .INFIXOP2, .INFIXOP3, .INFIXOP4,
 .BARBAR, .PLUS, .STAR, .AMPERAMPER, .AMPERAND, .COLONEQUAL, .GREATER, .LESS,
 .MINUS, .MINUSDOT, .MINUSGREATER, .OR, .PLUSDOT, .PLUSEQ, .EQUAL
