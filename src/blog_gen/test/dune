@@ -1,0 +1,2 @@
+(cram
+ (deps (source_tree ../../../blog) %{bin:health_check}))

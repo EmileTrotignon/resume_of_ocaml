@@ -1,0 +1,4 @@
+(executable
+ (name health_check)
+ (public_name health_check)
+ (libraries cmdliner blog_gen tyre))

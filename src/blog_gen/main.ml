@@ -1,3 +1,4 @@
+open Blog_gen
 open Result_syntax
 
 let main input output =

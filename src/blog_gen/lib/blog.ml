@@ -1,7 +1,7 @@
 type content =
-  | Article of {html: string}
+  | Article of {html: string; source:string}
   | File of {content: string}
-  | Dir of {index_html: string; sub: t list}
+  | Dir of {index_html: string; index_source:string option; sub: t list}
 [@@deriving show]
 
 and t = {name: string; content: content} [@@deriving show]
@@ -53,15 +53,16 @@ let auto_index ~path file (sub_files : Fpath.t list) =
 let rec load_dir ~path file : (content, Rresult.R.msg) result =
   let* sub = OS.Dir.contents file |> add_msg ~msg:"load_dir: OS.Dir.contents" in
   let index, sub = List.partition is_index sub in
-  let* index_html =
+  let* index_html, index_source =
     match index with
     | [index] ->
         let* index_md =
           OS.File.read index |> add_msg ~msg:"load_dir: OS.File.read"
         in
-        Ok (html_of_markdown ~path index_md)
+
+        Ok (html_of_markdown ~path index_md, Some index_md)
     | [] ->
-        Ok (auto_index ~path file sub)
+        Ok (auto_index ~path file sub, None)
     | _ :: _ ->
         Error
           (`Msg
@@ -70,13 +71,14 @@ let rec load_dir ~path file : (content, Rresult.R.msg) result =
                 happen."
                Fpath.pp file ) )
   in
+  let sub = List.filter (fun file -> Fpath.basename file <> "test") sub in
   let+ sub = list_map (load ~path) sub in
-  Dir {index_html: string; sub}
+  Dir {index_html: string; index_source; sub}
 
 and load_article ~path file =
   let+ md = OS.File.read file |> add_msg ~msg:"load_article: OS.File.read" in
   let html = html_of_markdown ~path md in
-  Article {html}
+  Article {html;source=md}
 
 and load_file file =
   let+ content = OS.File.read file |> add_msg ~msg:"load_file: OS.File.read" in
@@ -109,9 +111,9 @@ and write_file ~path ~name ~content = OS.File.write Fpath.(path / name) content
 
 and write ~path {name; content} =
   match content with
-  | Dir {index_html; sub} ->
+  | Dir {index_html; index_source=_; sub} ->
       write_dir ~path ~name ~index_html ~sub
-  | Article {html} ->
+  | Article {html;source=_} ->
       write_article ~path ~name ~html
   | File {content} ->
       write_file ~path ~name ~content
