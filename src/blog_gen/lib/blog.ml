@@ -1,7 +1,7 @@
 type content =
-  | Article of {html: string; source:string}
+  | Article of {html: string; source: string}
   | File of {content: string}
-  | Dir of {index_html: string; index_source:string option; sub: t list}
+  | Dir of {index_html: string; index_source: string option; sub: t list}
 [@@deriving show]
 
 and t = {name: string; content: content} [@@deriving show]
@@ -14,11 +14,6 @@ open Result_syntax
 
 let is_index file = Fpath.basename file = "readme.md"
 
-let suffix_md_to_html link =
-  if String.ends_with ~suffix:".md" link then
-    String.sub link 0 (String.length link - 3) ^ ".html"
-  else link
-
 let html_into_page ~path html =
   let open Resume_lib in
   let breadcrumbs = path |> List.rev |> Breadcrumbs.of_string_list in
@@ -29,9 +24,7 @@ let html_into_page ~path html =
 
 let html_of_markdown ~path (md : string) =
   html_into_page ~path
-    ( md |> Cmarkit.Doc.of_string
-    |> Md_helpers.(map_link suffix_md_to_html)
-    |> Md_helpers.(image_legend)
+    ( md |> Md_transform.insert_nbsp_in_string |> Cmarkit.Doc.of_string |> Md_transform.tranform
     |> Cmarkit_html.of_doc ~safe:false )
 
 let auto_index ~path file (sub_files : Fpath.t list) =
@@ -59,7 +52,6 @@ let rec load_dir ~path file : (content, Rresult.R.msg) result =
         let* index_md =
           OS.File.read index |> add_msg ~msg:"load_dir: OS.File.read"
         in
-
         Ok (html_of_markdown ~path index_md, Some index_md)
     | [] ->
         Ok (auto_index ~path file sub, None)
@@ -78,7 +70,7 @@ let rec load_dir ~path file : (content, Rresult.R.msg) result =
 and load_article ~path file =
   let+ md = OS.File.read file |> add_msg ~msg:"load_article: OS.File.read" in
   let html = html_of_markdown ~path md in
-  Article {html;source=md}
+  Article {html; source= md}
 
 and load_file file =
   let+ content = OS.File.read file |> add_msg ~msg:"load_file: OS.File.read" in
@@ -104,16 +96,16 @@ let rec write_dir ~path ~name ~index_html ~sub =
   list_iter (write ~path) sub
 
 and write_article ~path ~name ~html =
-  let name = suffix_md_to_html name in
+  let name = Md_transform.suffix_md_to_html name in
   OS.File.write Fpath.(path / name) html
 
 and write_file ~path ~name ~content = OS.File.write Fpath.(path / name) content
 
 and write ~path {name; content} =
   match content with
-  | Dir {index_html; index_source=_; sub} ->
+  | Dir {index_html; index_source= _; sub} ->
       write_dir ~path ~name ~index_html ~sub
-  | Article {html;source=_} ->
+  | Article {html; source= _} ->
       write_article ~path ~name ~html
   | File {content} ->
       write_file ~path ~name ~content

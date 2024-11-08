@@ -73,3 +73,26 @@ let image_legend md =
   in
   let mapper = Mapper.make ~inline () in
   Mapper.map_doc mapper md
+
+let alt_flat tyre1 tyre2 =
+  Tyre.(
+    conv
+      (function `Left a -> a | `Right a -> a)
+      (fun a -> `Left a)
+      (alt tyre1 tyre2) )
+
+let ( <||> ) = alt_flat
+
+let str_nbsp txt = Tyre.(attach ("&nbsp;" ^ txt) (str " " *> str txt))
+
+let insert_nbsp_in_string txt =
+  Result.get_ok
+    Tyre.(
+      replace (compile (str_nbsp ":" <||> str_nbsp ";" <||> str_nbsp "!")) txt )
+
+let suffix_md_to_html link =
+  if String.ends_with ~suffix:".md" link then
+    String.sub link 0 (String.length link - 3) ^ ".html"
+  else link
+
+let tranform md = md |> image_legend |> map_link suffix_md_to_html
