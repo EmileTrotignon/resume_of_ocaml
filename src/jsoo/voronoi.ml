@@ -45,7 +45,6 @@ module P2_ = struct
     let p4 = (x p4, y p4) in
     Delaunay.FloatPoints.in_circle p1 p2 p3 p4
 
-
   let random_b box =
     v
       (Random.float (Box2.w box) +. Box2.minx box)
@@ -332,33 +331,36 @@ type state =
   ; mutable previous_time: float }
 
 let rec step ({particules; mouse_pos; previous_time} as state) canvas time =
-  let bounds = bounds canvas in
-  let delta_t = Float.(max 0. (time - previous_time)) in
-  state.previous_time <- time ;
-  Array.mapi_inplace
-    (fun i {pos; speed} ->
-      if i = 0 then
-        (* particule 0 is the one that follows the mouse *)
-        let pos = mouse_pos in
-        {pos; speed}
-      else
-        let delta_pos = V2.(Float.(delta_t / 1000.) * speed) in
-        let pos = V2.(pos + delta_pos) in
-        let {pos; speed} =
-          if Box2.mem pos bounds then {pos; speed}
-          else
-            let speed = V2.(-1. * speed) in
-            let delta_pos = V2.(-2. * delta_pos) in
-            let pos = V2.(pos + delta_pos) in
+  if time -. previous_time > 0. && (time -. previous_time) /. 1000. <= 1. /. 30.
+  then ignore (G.request_animation_frame (step state canvas))
+  else
+    let bounds = bounds canvas in
+    let delta_t = Float.(max 0. (time - previous_time)) in
+    state.previous_time <- time ;
+    Array.mapi_inplace
+      (fun i {pos; speed} ->
+        if i = 0 then
+          (* particule 0 is the one that follows the mouse *)
+          let pos = mouse_pos in
+          {pos; speed}
+        else
+          let delta_pos = V2.(Float.(delta_t / 1000.) * speed) in
+          let pos = V2.(pos + delta_pos) in
+          let {pos; speed} =
             if Box2.mem pos bounds then {pos; speed}
             else
-              let pos = P2.random_b bounds in
-              {pos; speed}
-        in
-        {pos; speed} )
-    particules ;
-  display_particules canvas ~time particules ;
-  ignore (G.request_animation_frame (step state canvas))
+              let speed = V2.(-1. * speed) in
+              let delta_pos = V2.(-2. * delta_pos) in
+              let pos = V2.(pos + delta_pos) in
+              if Box2.mem pos bounds then {pos; speed}
+              else
+                let pos = P2.random_b bounds in
+                {pos; speed}
+          in
+          {pos; speed} )
+      particules ;
+    display_particules canvas ~time particules ;
+    ignore (G.request_animation_frame (step state canvas))
 
 let random_speed () =
   V2.(5. * P2.random_b (Box2.v (V2.v (-1.) (-1.)) (V2.v 2. 2.)))
@@ -372,7 +374,7 @@ let follow_mouse state ev =
 
 let new_particules canvas =
   Canvas.set_size_to_layout_size canvas ;
-  let n_points = Box2.area (bounds canvas) /. 5000. |> int_of_float in
+  let n_points = Box2.area (bounds canvas) /. 8000. |> int_of_float in
   Array.init n_points (fun _i ->
       let pos = P2.random_b (bounds canvas) in
       let speed = random_speed () in
